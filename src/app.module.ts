@@ -1,11 +1,17 @@
 import { Module } from '@nestjs/common';
-import { AlbumModule } from './domain/album/module';
-import { ArtistModule } from './domain/artist/module';
-import { FavoriteModule } from './domain/favorite/module';
-import { TrackModule } from './domain/track/module';
-import { UserModule } from './domain/user/module';
+import { UsersModule } from './domains/users/users.module';
+import { AlbumsModule } from './domains/albums/albums.module';
+import { ArtistsModule } from './domains/artists/artists.module';
+import { FavoritesModule } from './domains/favorites/favorites.module';
+import { TracksModule } from './domains/tracks/tracks.module';
 
 @Module({
-  imports: [AlbumModule, ArtistModule, FavoriteModule, TrackModule, UserModule],
+  imports: [
+    UsersModule,
+    AlbumsModule,
+    ArtistsModule,
+    FavoritesModule,
+    TracksModule,
+  ],
 })
 export class AppModule {}
