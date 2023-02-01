@@ -1,18 +1,20 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { constants as httpStatus } from 'http2';
 import { UserEntity } from './entities/user.entity';
 import { errorMessages } from './messages/error.messages';
 import { getCurrentTimestamp } from '../../common/date';
 import { generateUuid } from '../../common/uuid';
 import { getCreateEntityVersion } from '../../common/version';
+import { UsersStorageInterface } from './interfaces/users-storage.interface';
+import { CreateUserDtoInterface } from './interfaces/create-user.dto.interface';
+import { UpdatePasswordDtoInterface } from './interfaces/update-password.dto.interface';
+import { STORAGE_KEY } from './names.providers';
 
 @Injectable()
 export class UsersService {
-  private readonly users: UserEntity[] = [];
+  constructor(@Inject(STORAGE_KEY) private storage: UsersStorageInterface) {}
 
-  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async create(createUserDto: CreateUserDtoInterface): Promise<UserEntity> {
     const currentTimestamp = getCurrentTimestamp();
     const user = {
       id: generateUuid(),
@@ -22,17 +24,17 @@ export class UsersService {
       updatedAt: currentTimestamp,
     };
 
-    this.users.push(user);
+    await this.storage.save(user);
 
     return user;
   }
 
   async findAll(): Promise<UserEntity[]> {
-    return this.users;
+    return this.storage.findAll();
   }
 
   async findOne(id: string): Promise<UserEntity> {
-    const user = this.users.find((user) => user.id === id);
+    const user = this.storage.findById(id);
 
     if (!user) {
       throw new HttpException(
@@ -44,20 +46,34 @@ export class UsersService {
     return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+  async updatePassword(
+    id: string,
+    updatePasswordDto: UpdatePasswordDtoInterface,
+  ): Promise<void> {
+    const user = await this.storage.findById(id);
 
-  async remove(id: string): Promise<void> {
-    const index = this.users.findIndex((user) => user.id === id);
-
-    if (index === -1) {
+    if (!user) {
       throw new HttpException(
         errorMessages.USER_NOT_FOUND,
         httpStatus.HTTP_STATUS_NOT_FOUND,
       );
     }
 
-    this.users.splice(index, 1);
+    user.password = updatePasswordDto.newPassword;
+
+    await this.storage.update(user.id, user);
+  }
+
+  async remove(id: string): Promise<void> {
+    const user = await this.storage.findById(id);
+
+    if (!user) {
+      throw new HttpException(
+        errorMessages.USER_NOT_FOUND,
+        httpStatus.HTTP_STATUS_NOT_FOUND,
+      );
+    }
+
+    await this.storage.remove(user.id);
   }
 }
