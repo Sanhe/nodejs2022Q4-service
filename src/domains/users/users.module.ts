@@ -10,7 +10,7 @@ import { STORAGE_KEY } from './names.providers';
     UsersService,
     {
       provide: STORAGE_KEY,
-      useValue: InMemoryUsersStorage,
+      useClass: InMemoryUsersStorage,
     },
   ],
 })

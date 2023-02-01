@@ -5,14 +5,16 @@ import { errorMessages } from './messages/error.messages';
 import { getCurrentTimestamp } from '../../common/date';
 import { generateUuid } from '../../common/uuid';
 import { getCreateEntityVersion } from '../../common/version';
-import { UsersStorageInterface } from './interfaces/users-storage.interface';
 import { CreateUserDtoInterface } from './interfaces/create-user.dto.interface';
 import { UpdatePasswordDtoInterface } from './interfaces/update-password.dto.interface';
 import { STORAGE_KEY } from './names.providers';
+import { UsersStorageInterface } from './interfaces/users-storage.interface';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject(STORAGE_KEY) private storage: UsersStorageInterface) {}
+  constructor(
+    @Inject(STORAGE_KEY) private readonly storage: UsersStorageInterface,
+  ) {}
 
   async create(createUserDto: CreateUserDtoInterface): Promise<UserEntity> {
     const currentTimestamp = getCurrentTimestamp();
@@ -30,11 +32,13 @@ export class UsersService {
   }
 
   async findAll(): Promise<UserEntity[]> {
-    return this.storage.findAll();
+    const users = await this.storage.findAll();
+
+    return users;
   }
 
   async findOne(id: string): Promise<UserEntity> {
-    const user = this.storage.findById(id);
+    const user = await this.storage.findById(id);
 
     if (!user) {
       throw new HttpException(
