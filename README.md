@@ -8,7 +8,13 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone git@github.com:Sanhe/nodejs2022Q4-service.git
+```
+
+## Switching to dev branch `feature/rest-service`
+
+```
+git checkout feature/rest-service
 ```
 
 ## Installing NPM modules
@@ -16,6 +22,13 @@ git clone {repository URL}
 ```
 npm install
 ```
+
+## Copying `.env.example` to `.env` and updating the API port value if needed
+
+```
+cp .env.example .env
+```
+*Note: The default API port is 4000.*
 
 ## Running application
 

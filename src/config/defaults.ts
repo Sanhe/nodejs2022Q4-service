@@ -1,0 +1,13 @@
+const DEFAULT_API_PORT = 4000;
+const PARSE_INT_RADIX_10 = 10;
+const DEFAULT_ENV_FILES = ['.env', '.env.example'];
+const ENV_API_PORT_KEY = 'PORT';
+const CONFIG_PORT_KEY = 'port';
+
+export {
+  DEFAULT_API_PORT,
+  PARSE_INT_RADIX_10,
+  DEFAULT_ENV_FILES,
+  ENV_API_PORT_KEY,
+  CONFIG_PORT_KEY,
+};
