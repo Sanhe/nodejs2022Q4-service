@@ -8,7 +8,6 @@ import {
 export class UpdatePasswordDto implements UpdatePasswordDtoInterface {
   @IsString()
   @IsNotEmpty()
-  @Length(USER_PASSWORD_MIN_LENGTH, USER_PASSWORD_MAX_LENGTH)
   readonly oldPassword: string;
 
   @IsString()

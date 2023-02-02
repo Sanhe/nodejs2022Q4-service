@@ -9,10 +9,10 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdatePasswordDtoInterface } from './interfaces/update-password.dto.interface';
+import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersFormatter } from './users.formatter';
 import { DEFAULT_UUID_VERSION_NUMBER } from '../../common/uuid/config';
+import { UpdatePasswordDto } from './dtos/update-password.dto';
 
 @Controller('users')
 export class UsersController {
@@ -50,14 +50,21 @@ export class UsersController {
 
   @Put(':id')
   async updatePassword(
-    @Param('id') id: string,
-    @Body() updatePasswordDto: UpdatePasswordDtoInterface,
+    @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
+    id: string,
+    @Body() updatePasswordDto: UpdatePasswordDto,
   ) {
-    await this.usersService.updatePassword(id, updatePasswordDto);
+    const user = await this.usersService.updatePassword(id, updatePasswordDto);
+    const formattedUser = this.usersFormatter.formatUserToOutput(user);
+
+    return formattedUser;
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async remove(
+    @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
+    id: string,
+  ) {
     await this.usersService.remove(id);
   }
 }
