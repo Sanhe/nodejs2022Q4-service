@@ -10,30 +10,37 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDtoInterface } from './interfaces/update-password.dto.interface';
+import { UsersFormatter } from './users.formatter';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly usersFormatter: UsersFormatter,
+  ) {}
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto);
+    const formattedUser = this.usersFormatter.formatUserToOutput(user);
 
-    return user;
+    return formattedUser;
   }
 
   @Get()
   async findAll() {
     const users = await this.usersService.findAll();
+    const formattedUsers = this.usersFormatter.formatUsersToOutput(users);
 
-    return users;
+    return formattedUsers;
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(id);
+    const formattedUser = this.usersFormatter.formatUserToOutput(user);
 
-    return user;
+    return formattedUser;
   }
 
   @Put(':id')

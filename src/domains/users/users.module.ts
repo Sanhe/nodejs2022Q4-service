@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { InMemoryUsersStorage } from './storages/in-memory-users.storage';
 import { STORAGE_KEY } from './names.providers';
+import { UsersFormatter } from './users.formatter';
 
 @Module({
   controllers: [UsersController],
@@ -12,6 +13,7 @@ import { STORAGE_KEY } from './names.providers';
       provide: STORAGE_KEY,
       useClass: InMemoryUsersStorage,
     },
+    UsersFormatter,
   ],
 })
 export class UsersModule {}
