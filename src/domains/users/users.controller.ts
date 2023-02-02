@@ -16,7 +16,7 @@ import { UsersFormatter } from './users.formatter';
 import { DEFAULT_UUID_VERSION_NUMBER } from '../../common/uuid/config';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 
-@Controller('users')
+@Controller('user')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
