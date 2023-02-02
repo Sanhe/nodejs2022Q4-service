@@ -1,3 +1,4 @@
+import { constants as httpStatus } from 'node:http2';
 import {
   Controller,
   Get,
@@ -7,6 +8,7 @@ import {
   Delete,
   Put,
   ParseUUIDPipe,
+  HttpCode,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -61,6 +63,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @HttpCode(httpStatus.HTTP_STATUS_NO_CONTENT)
   async remove(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
