@@ -1,10 +1,10 @@
 import { UserEntityInterface } from '../interfaces/user.entity.interface';
 import { IsInt, IsString, IsUUID } from 'class-validator';
-import { DEFAULT_VERSION_NUMBER } from '../../../common/uuid/config';
+import { DEFAULT_UUID_VERSION_NUMBER } from '../../../common/uuid/config';
 
 export class UserEntity implements UserEntityInterface {
   @IsString()
-  @IsUUID(DEFAULT_VERSION_NUMBER)
+  @IsUUID(DEFAULT_UUID_VERSION_NUMBER)
   id: string;
 
   @IsString()

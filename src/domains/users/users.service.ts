@@ -18,6 +18,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDtoInterface): Promise<UserEntity> {
     const currentTimestamp = getCurrentTimestamp();
+
     const user = {
       id: generateUuid(),
       ...createUserDto,
