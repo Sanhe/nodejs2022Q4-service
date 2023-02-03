@@ -46,7 +46,7 @@ export class ArtistsService {
   }
 
   async update(id: string, updateArtistDto: UpdateArtistDto) {
-    const artist = await this.dbService.db.artists.findOne(id);
+    const artist = await this.dbService.db.artists.findById(id);
 
     if (!artist) {
       throw new HttpException(
@@ -55,13 +55,16 @@ export class ArtistsService {
       );
     }
 
-    const updatedArtist = await this.dbService.db.artists.updated(id, artist);
+    const updatedArtist = await this.dbService.db.artists.update(id, {
+      ...artist,
+      ...updateArtistDto,
+    });
 
     return updatedArtist;
   }
 
   async remove(id: string) {
-    const artist = await this.dbService.db.artists.findOne(id);
+    const artist = await this.dbService.db.artists.findById(id);
 
     if (!artist) {
       throw new HttpException(
@@ -71,5 +74,7 @@ export class ArtistsService {
     }
 
     await this.dbService.db.artists.remove(id);
+
+    // TODO: set track.artistId to null after deletion
   }
 }
