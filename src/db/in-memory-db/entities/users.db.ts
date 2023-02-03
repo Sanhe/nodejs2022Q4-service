@@ -7,4 +7,10 @@ export class InMemoryUsersDb
   implements EntityDbInterface<UserEntityInterface>
 {
   protected readonly entities: UserEntityInterface[] = [];
+
+  constructor(initialEntities: UserEntityInterface[] = []) {
+    super();
+
+    this.entities = initialEntities;
+  }
 }

@@ -7,4 +7,10 @@ export class InMemoryFavoritesDb
   implements EntityDbInterface<FavoriteEntityInterface>
 {
   protected readonly entities: FavoriteEntityInterface[] = [];
+
+  constructor(initialEntities: FavoriteEntityInterface[] = []) {
+    super();
+
+    this.entities = initialEntities;
+  }
 }
