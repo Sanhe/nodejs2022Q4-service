@@ -1,7 +1,11 @@
 export default abstract class AbstractEntity<Entity> {
   protected readonly entities: Entity[] = [];
 
-  async save(entity: Entity): Promise<void> {
+  constructor(initialEntities: Entity[] = []) {
+    this.entities = initialEntities;
+  }
+
+  async add(entity: Entity): Promise<void> {
     this.entities.push(entity);
   }
 
@@ -13,9 +17,14 @@ export default abstract class AbstractEntity<Entity> {
     return this.entities;
   }
 
-  async update(id: string, ent: Entity): Promise<void> {
+  async update(id: string, ent: Entity): Promise<Entity> {
     const index = this.entities.findIndex((en) => en['id'] === id);
-    this.entities[index] = ent;
+    this.entities[index] = {
+      id,
+      ...ent,
+    };
+
+    return this.entities[index];
   }
 
   async remove(id: string): Promise<void> {

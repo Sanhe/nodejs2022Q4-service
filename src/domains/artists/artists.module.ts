@@ -1,17 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { ArtistsController } from './artists.controller';
-import { STORAGE_KEY } from '../../db/names.providers';
-import InMemoryDb from '../../db/in-memory-db/db';
+import { DbModule } from '../../db/db.module';
 
 @Module({
   controllers: [ArtistsController],
-  providers: [
-    ArtistsService,
-    {
-      provide: STORAGE_KEY,
-      useClass: InMemoryDb,
-    },
-  ],
+  imports: [DbModule],
+  providers: [ArtistsService],
 })
 export class ArtistsModule {}

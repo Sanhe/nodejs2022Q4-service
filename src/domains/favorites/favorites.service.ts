@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
 import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { DbService } from '../../db/db.service';
 
 @Injectable()
 export class FavoritesService {
+  constructor(private readonly dbService: DbService) {}
+
   create(createFavoriteDto: CreateFavoriteDto) {
     return 'This action adds a new favorite';
   }

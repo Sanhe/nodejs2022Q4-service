@@ -1,11 +1,11 @@
 export default interface EntityDbInterface<Entity> {
-  save(entity: Entity): Promise<void>;
+  add(entity: Entity): Promise<void>;
 
   findById(id: string): Promise<Entity | undefined>;
 
   findAll(): Promise<Entity[]>;
 
-  update(id: string, entity: Entity): Promise<void>;
+  update(id: string, entity: Entity): Promise<Entity>;
 
   remove(id: string): Promise<void>;
 }

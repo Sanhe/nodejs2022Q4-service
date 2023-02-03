@@ -1,19 +1,18 @@
-import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { constants as httpStatus } from 'http2';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { errorMessages } from './messages/error.messages';
 import { getCurrentTimestamp } from '../../common/date';
 import { generateUuid } from '../../common/uuid';
 import { getCreateEntityVersion } from '../../common/version';
 import { CreateUserDtoInterface } from './interfaces/create-user.dto.interface';
 import { UpdatePasswordDtoInterface } from './interfaces/update-password.dto.interface';
-import { STORAGE_KEY } from '../../db/names.providers';
 import { UserEntityInterface } from './interfaces/user.entity.interface';
 import { USER_VERSION_INCREMENT } from './users.config';
-import DB from '../../db/db';
+import { DbService } from '../../db/db.service';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject(STORAGE_KEY) private readonly db: DB) {}
+  constructor(private readonly dbService: DbService) {}
 
   async create(
     createUserDto: CreateUserDtoInterface,
@@ -28,19 +27,19 @@ export class UsersService {
       updatedAt: currentTimestamp,
     };
 
-    await this.db.users.save(user);
+    await this.dbService.db.users.add(user);
 
     return user;
   }
 
   async findAll(): Promise<UserEntityInterface[]> {
-    const users = await this.db.users.findAll();
+    const users = await this.dbService.db.users.findAll();
 
     return users;
   }
 
   async findOne(id: string): Promise<UserEntityInterface> {
-    const user = await this.db.users.findById(id);
+    const user = await this.dbService.db.users.findById(id);
 
     if (!user) {
       throw new HttpException(
@@ -56,7 +55,7 @@ export class UsersService {
     id: string,
     updatePasswordDto: UpdatePasswordDtoInterface,
   ): Promise<UserEntityInterface> {
-    const user = await this.db.users.findById(id);
+    const user = await this.dbService.db.users.findById(id);
 
     if (!user) {
       throw new HttpException(
@@ -76,13 +75,13 @@ export class UsersService {
     user.version += USER_VERSION_INCREMENT;
     user.updatedAt = getCurrentTimestamp();
 
-    await this.db.users.update(user.id, user);
+    const updatedUser = await this.dbService.db.users.update(user.id, user);
 
-    return user;
+    return updatedUser;
   }
 
   async remove(id: string): Promise<void> {
-    const user = await this.db.users.findById(id);
+    const user = await this.dbService.db.users.findById(id);
 
     if (!user) {
       throw new HttpException(
@@ -91,6 +90,6 @@ export class UsersService {
       );
     }
 
-    await this.db.users.remove(user.id);
+    await this.dbService.db.users.remove(user.id);
   }
 }

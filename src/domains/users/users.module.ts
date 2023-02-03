@@ -2,18 +2,11 @@ import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { UsersFormatter } from './users.formatter';
-import { STORAGE_KEY } from '../../db/names.providers';
-import InMemoryDb from '../../db/in-memory-db/db';
+import { DbModule } from '../../db/db.module';
 
 @Module({
   controllers: [UsersController],
-  providers: [
-    UsersService,
-    {
-      provide: STORAGE_KEY,
-      useClass: InMemoryDb,
-    },
-    UsersFormatter,
-  ],
+  imports: [DbModule],
+  providers: [UsersService, UsersFormatter],
 })
 export class UsersModule {}

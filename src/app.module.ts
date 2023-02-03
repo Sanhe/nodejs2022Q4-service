@@ -7,6 +7,7 @@ import { TracksModule } from './domains/tracks/tracks.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
 import { DEFAULT_ENV_FILES } from './config/defaults';
+import { DbModule } from './db/db.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { DEFAULT_ENV_FILES } from './config/defaults';
       envFilePath: DEFAULT_ENV_FILES,
       load: [configuration],
     }),
+    DbModule,
     UsersModule,
     AlbumsModule,
     ArtistsModule,
