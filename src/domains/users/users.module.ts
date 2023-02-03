@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { InMemoryUsersStorage } from './storages/in-memory-users.storage';
-import { STORAGE_KEY } from './names.providers';
 import { UsersFormatter } from './users.formatter';
+import { STORAGE_KEY } from '../../db/names.providers';
+import InMemoryDb from '../../db/in-memory-db/db';
 
 @Module({
   controllers: [UsersController],
@@ -11,7 +11,7 @@ import { UsersFormatter } from './users.formatter';
     UsersService,
     {
       provide: STORAGE_KEY,
-      useClass: InMemoryUsersStorage,
+      useClass: InMemoryDb,
     },
     UsersFormatter,
   ],
