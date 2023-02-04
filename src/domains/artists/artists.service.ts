@@ -35,27 +35,14 @@ export class ArtistsService {
   async findOne(id: string): Promise<ArtistEntityInterface | undefined> {
     const artist = await this.dbService.db.artists.findById(id);
 
-    if (!artist) {
-      throw new HttpException(
-        errorMessages.ARTIST_NOT_FOUND,
-        httpStatus.HTTP_STATUS_NOT_FOUND,
-      );
-    }
-
     return artist;
   }
 
-  async update(id: string, updateArtistDto: UpdateArtistDto) {
-    const artist = await this.dbService.db.artists.findById(id);
-
-    if (!artist) {
-      throw new HttpException(
-        errorMessages.ARTIST_NOT_FOUND,
-        httpStatus.HTTP_STATUS_NOT_FOUND,
-      );
-    }
-
-    const updatedArtist = await this.dbService.db.artists.update(id, {
+  async update(
+    artist: ArtistEntityInterface,
+    updateArtistDto: UpdateArtistDto,
+  ) {
+    const updatedArtist = await this.dbService.db.artists.update(artist.id, {
       ...artist,
       ...updateArtistDto,
     });
@@ -63,17 +50,8 @@ export class ArtistsService {
     return updatedArtist;
   }
 
-  async remove(id: string) {
-    const artist = await this.dbService.db.artists.findById(id);
-
-    if (!artist) {
-      throw new HttpException(
-        errorMessages.ARTIST_NOT_FOUND,
-        httpStatus.HTTP_STATUS_NOT_FOUND,
-      );
-    }
-
-    await this.dbService.db.artists.remove(id);
+  async remove(artist: ArtistEntityInterface) {
+    await this.dbService.db.artists.remove(artist.id);
 
     // TODO: set track.artistId to null after deletion
   }

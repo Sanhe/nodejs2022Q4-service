@@ -8,12 +8,14 @@ import {
   Put,
   ParseUUIDPipe,
   HttpCode,
+  NotFoundException,
 } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { DEFAULT_UUID_VERSION_NUMBER } from '../../common/uuid/config';
 import { constants as httpStatus } from 'http2';
+import { errorMessages } from './messages/error.messages';
 
 @Controller('artist')
 export class ArtistsController {
@@ -36,7 +38,13 @@ export class ArtistsController {
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
   ) {
-    return await this.artistsService.findOne(id);
+    const artist = await this.artistsService.findOne(id);
+
+    if (!artist) {
+      throw new NotFoundException(errorMessages.ARTIST_NOT_FOUND);
+    }
+
+    return artist;
   }
 
   @Put(':id')
@@ -45,7 +53,18 @@ export class ArtistsController {
     id: string,
     @Body() updateArtistDto: UpdateArtistDto,
   ) {
-    return await this.artistsService.update(id, updateArtistDto);
+    const artist = await this.artistsService.findOne(id);
+
+    if (!artist) {
+      throw new NotFoundException(errorMessages.ARTIST_NOT_FOUND);
+    }
+
+    const updatedArtist = await this.artistsService.update(
+      artist,
+      updateArtistDto,
+    );
+
+    return updatedArtist;
   }
 
   @Delete(':id')
@@ -54,6 +73,12 @@ export class ArtistsController {
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
   ) {
-    return await this.artistsService.remove(id);
+    const artist = await this.artistsService.findOne(id);
+
+    if (!artist) {
+      throw new NotFoundException(errorMessages.ARTIST_NOT_FOUND);
+    }
+
+    return await this.artistsService.remove(artist);
   }
 }
