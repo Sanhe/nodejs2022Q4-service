@@ -1,6 +1,4 @@
-import { constants as httpStatus } from 'http2';
-import { HttpException, Inject, Injectable } from '@nestjs/common';
-import { errorMessages } from './messages/error.messages';
+import { Injectable } from '@nestjs/common';
 import { getCurrentTimestamp } from '../../common/date';
 import { generateUuid } from '../../common/uuid';
 import { getCreateEntityVersion } from '../../common/version';
@@ -9,6 +7,7 @@ import { UpdatePasswordDtoInterface } from './interfaces/update-password.dto.int
 import { UserEntityInterface } from './interfaces/user.entity.interface';
 import { USER_VERSION_INCREMENT } from './users.config';
 import { DbService } from '../../db/db.service';
+import { InvalidPasswordError } from './errors/invalid-password.error';
 
 @Injectable()
 export class UsersService {
@@ -38,37 +37,18 @@ export class UsersService {
     return users;
   }
 
-  async findOne(id: string): Promise<UserEntityInterface> {
+  async findOne(id: string): Promise<UserEntityInterface | undefined> {
     const user = await this.dbService.db.users.findById(id);
-
-    if (!user) {
-      throw new HttpException(
-        errorMessages.USER_NOT_FOUND,
-        httpStatus.HTTP_STATUS_NOT_FOUND,
-      );
-    }
 
     return user;
   }
 
   async updatePassword(
-    id: string,
+    user: UserEntityInterface,
     updatePasswordDto: UpdatePasswordDtoInterface,
   ): Promise<UserEntityInterface> {
-    const user = await this.dbService.db.users.findById(id);
-
-    if (!user) {
-      throw new HttpException(
-        errorMessages.USER_NOT_FOUND,
-        httpStatus.HTTP_STATUS_NOT_FOUND,
-      );
-    }
-
     if (user.password !== updatePasswordDto.oldPassword) {
-      throw new HttpException(
-        errorMessages.INVALID_PASSWORD,
-        httpStatus.HTTP_STATUS_FORBIDDEN,
-      );
+      throw new InvalidPasswordError();
     }
 
     user.password = updatePasswordDto.newPassword;
@@ -80,16 +60,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  async remove(id: string): Promise<void> {
-    const user = await this.dbService.db.users.findById(id);
-
-    if (!user) {
-      throw new HttpException(
-        errorMessages.USER_NOT_FOUND,
-        httpStatus.HTTP_STATUS_NOT_FOUND,
-      );
-    }
-
+  async remove(user: UserEntityInterface): Promise<void> {
     await this.dbService.db.users.remove(user.id);
   }
 }

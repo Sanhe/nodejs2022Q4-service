@@ -9,12 +9,15 @@ import {
   Put,
   ParseUUIDPipe,
   HttpCode,
+  HttpException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersFormatter } from './users.formatter';
 import { DEFAULT_UUID_VERSION_NUMBER } from '../../common/uuid/config';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
+import { UserNotFoundException } from './errors/user-not-found.error';
+import { InvalidPasswordError } from './errors/invalid-password.error';
 
 @Controller('user')
 export class UsersController {
@@ -45,6 +48,11 @@ export class UsersController {
     id: string,
   ) {
     const user = await this.usersService.findOne(id);
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
     const formattedUser = this.usersFormatter.formatUserToOutput(user);
 
     return formattedUser;
@@ -56,10 +64,31 @@ export class UsersController {
     id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ) {
-    const user = await this.usersService.updatePassword(id, updatePasswordDto);
-    const formattedUser = this.usersFormatter.formatUserToOutput(user);
+    const user = await this.usersService.findOne(id);
 
-    return formattedUser;
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
+    try {
+      const updatedUser = await this.usersService.updatePassword(
+        user,
+        updatePasswordDto,
+      );
+
+      const formattedUser = this.usersFormatter.formatUserToOutput(updatedUser);
+
+      return formattedUser;
+    } catch (error) {
+      if (error instanceof InvalidPasswordError) {
+        throw new HttpException(
+          error.message,
+          httpStatus.HTTP_STATUS_FORBIDDEN,
+        );
+      }
+
+      throw error;
+    }
   }
 
   @Delete(':id')
@@ -68,6 +97,12 @@ export class UsersController {
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
   ) {
-    await this.usersService.remove(id);
+    const user = await this.usersService.findOne(id);
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
+    await this.usersService.remove(user);
   }
 }
