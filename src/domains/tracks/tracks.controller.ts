@@ -13,9 +13,9 @@ import {
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { errorMessages } from './messages/error.messages';
 import { DEFAULT_UUID_VERSION_NUMBER } from '../../common/uuid/config';
 import { constants as httpStatus } from 'http2';
+import { errorMessages } from '../../common/messages/error.messages';
 
 @Controller('track')
 export class TracksController {

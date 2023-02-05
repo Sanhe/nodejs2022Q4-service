@@ -1,9 +1,11 @@
 export default interface EntityDbInterface<Entity> {
   add(entity: Entity): Promise<void>;
 
+  findByField(field: string, value: string): Promise<Entity[]>;
+
   findById(id: string): Promise<Entity | undefined>;
 
-  findByField(field: string, value: string): Promise<Entity[]>;
+  findByIds(ids: string[]): Promise<Entity[]>;
 
   findAll(): Promise<Entity[]>;
 

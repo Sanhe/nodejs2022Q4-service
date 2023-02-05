@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   ParseUUIDPipe,
@@ -15,8 +14,8 @@ import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { DEFAULT_UUID_VERSION_NUMBER } from '../../common/uuid/config';
-import { errorMessages } from './messages/error.messages';
 import { constants as httpStatus } from 'http2';
+import { errorMessages } from '../../common/messages/error.messages';
 
 @Controller('album')
 export class AlbumsController {

@@ -17,6 +17,10 @@ export default abstract class AbstractEntity<Entity> {
     return this.entities.find((en) => en['id'] === id);
   }
 
+  async findByIds(ids: string[]): Promise<Entity[]> {
+    return this.entities.filter((en) => ids.includes(en['id']));
+  }
+
   async findAll(): Promise<Entity[]> {
     return this.entities;
   }

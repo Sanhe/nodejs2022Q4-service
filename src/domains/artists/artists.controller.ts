@@ -15,7 +15,7 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { DEFAULT_UUID_VERSION_NUMBER } from '../../common/uuid/config';
 import { constants as httpStatus } from 'http2';
-import { errorMessages } from './messages/error.messages';
+import { errorMessages } from '../../common/messages/error.messages';
 
 @Controller('artist')
 export class ArtistsController {

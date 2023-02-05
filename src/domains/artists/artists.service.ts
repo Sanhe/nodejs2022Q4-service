@@ -6,7 +6,7 @@ import { STORAGE_KEY } from '../../db/names.providers';
 import DB from '../../db/db';
 import { generateUuid } from '../../common/uuid';
 import { ArtistEntityInterface } from './interfaces/artist.entity.interface';
-import { errorMessages } from './messages/error.messages';
+import { errorMessages } from '../../common/messages/error.messages';
 import { DbService } from '../../db/db.service';
 
 @Injectable()

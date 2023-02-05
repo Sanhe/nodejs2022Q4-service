@@ -12,7 +12,7 @@ export default () => [
     artistId: '3342fbea-8ebc-4033-9f59-afe8977aeefa',
   },
   {
-    id: '08cd97f2-13d9-4d81-a8d9-968662070df2',
+    id: '08cd97f2-13d9-4d81-a8d9-968662070dr1',
     name: 'KC Album 1',
     year: 2002,
     artistId: 'ffc57ebb-6a9e-453d-9a53-160aef4a7400',
