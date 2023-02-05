@@ -12,10 +12,12 @@ export class TrackEntity implements TrackEntityInterface {
 
   @IsOptional()
   @IsString()
+  @IsUUID(DEFAULT_UUID_VERSION_NUMBER)
   artistId: string | null; // refers to Artist
 
   @IsOptional()
   @IsString()
+  @IsUUID(DEFAULT_UUID_VERSION_NUMBER)
   albumId: string | null; // refers to Album
 
   @IsInt()

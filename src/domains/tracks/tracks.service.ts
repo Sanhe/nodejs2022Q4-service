@@ -41,7 +41,7 @@ export class TracksService {
     return updatedTrack;
   }
 
-  async remove(track: TrackEntityInterface) {
+  async remove(track: TrackEntityInterface): Promise<void> {
     await this.dbService.db.tracks.remove(track.id);
   }
 }

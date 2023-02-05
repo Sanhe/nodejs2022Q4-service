@@ -2,28 +2,61 @@ import { Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { DbService } from '../../db/db.service';
+import { AlbumEntityInterface } from './interfaces/album.entity.interface';
+import { generateUuid } from '../../common/uuid';
 
 @Injectable()
 export class AlbumsService {
   constructor(private readonly dbService: DbService) {}
 
-  create(createAlbumDto: CreateAlbumDto) {
-    return 'This action adds a new album';
+  async create(createAlbumDto: CreateAlbumDto): Promise<AlbumEntityInterface> {
+    const album = {
+      id: generateUuid(),
+      ...createAlbumDto,
+    };
+
+    await this.dbService.db.albums.add(album);
+
+    return album;
   }
 
-  findAll() {
-    return `This action returns all albums`;
+  async findAll(): Promise<AlbumEntityInterface[]> {
+    const albums = await this.dbService.db.albums.findAll();
+
+    return albums;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} album`;
+  async findOne(id: string): Promise<AlbumEntityInterface | undefined> {
+    const album = await this.dbService.db.albums.findById(id);
+
+    return album;
   }
 
-  update(id: number, updateAlbumDto: UpdateAlbumDto) {
-    return `This action updates a #${id} album`;
+  async update(
+    album: AlbumEntityInterface,
+    updateAlbumDto: UpdateAlbumDto,
+  ): Promise<AlbumEntityInterface> {
+    const updatedAlbum = await this.dbService.db.albums.update(album.id, {
+      ...album,
+      ...updateAlbumDto,
+    });
+
+    return updatedAlbum;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} album`;
+  async remove(album: AlbumEntityInterface): Promise<void> {
+    await this.dbService.db.albums.remove(album.id);
+
+    const tracks = await this.dbService.db.tracks.findByField(
+      'albumId',
+      album.id,
+    );
+
+    tracks.forEach(async (track) => {
+      await this.dbService.db.tracks.update(track.id, {
+        ...track,
+        albumId: null,
+      });
+    });
   }
 }

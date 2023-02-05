@@ -21,14 +21,14 @@ export default () => [
     duration: 123,
   },
   {
-    id: '6328540c-d705-43bf-922a-99ff10e03c7b',
+    id: '6328540c-d705-43bf-922a-99ff10e03c78a',
     name: 'LV Track 2.2',
     artistId: '3342fbea-8ebc-4033-9f59-afe8977aeefa',
     albumId: '3342fbea-8ebc-4033-9f59-afe8977aeefa',
     duration: 456,
   },
   {
-    id: '6328540c-d705-43bf-922a-99ff10e03c7a',
+    id: '6328540c-d705-43bf-922a-99ff10e03c8b',
     name: 'LV Track 2.3',
     artistId: '3342fbea-8ebc-4033-9f59-afe8977aeefa',
     albumId: '3342fbea-8ebc-4033-9f59-afe8977aeefa',

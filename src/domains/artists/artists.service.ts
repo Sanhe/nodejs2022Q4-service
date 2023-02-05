@@ -50,7 +50,7 @@ export class ArtistsService {
     return updatedArtist;
   }
 
-  async remove(artist: ArtistEntityInterface) {
+  async remove(artist: ArtistEntityInterface): Promise<void> {
     await this.dbService.db.artists.remove(artist.id);
 
     const tracks = await this.dbService.db.tracks.findByField(
