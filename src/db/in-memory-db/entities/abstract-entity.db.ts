@@ -9,6 +9,10 @@ export default abstract class AbstractEntity<Entity> {
     this.entities.push(entity);
   }
 
+  async findByField(field: string, value: string): Promise<Entity[]> {
+    return this.entities.filter((en) => en[field] === value);
+  }
+
   async findById(id: string): Promise<Entity | undefined> {
     return this.entities.find((en) => en['id'] === id);
   }

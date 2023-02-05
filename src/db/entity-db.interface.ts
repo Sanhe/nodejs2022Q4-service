@@ -3,6 +3,8 @@ export default interface EntityDbInterface<Entity> {
 
   findById(id: string): Promise<Entity | undefined>;
 
+  findByField(field: string, value: string): Promise<Entity[]>;
+
   findAll(): Promise<Entity[]>;
 
   update(id: string, entity: Entity): Promise<Entity>;

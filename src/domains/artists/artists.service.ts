@@ -53,6 +53,16 @@ export class ArtistsService {
   async remove(artist: ArtistEntityInterface) {
     await this.dbService.db.artists.remove(artist.id);
 
-    // TODO: set track.artistId to null after deletion
+    const tracks = await this.dbService.db.tracks.findByField(
+      'artistId',
+      artist.id,
+    );
+
+    tracks.forEach(async (track) => {
+      await this.dbService.db.tracks.update(track.id, {
+        ...track,
+        artistId: null,
+      });
+    });
   }
 }
