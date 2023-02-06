@@ -1,13 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
 import { DbService } from '../../db/db.service';
 import { OutputFavoritesDto } from './dto/output-favorites.dto';
 import { generateUuid } from '../../common/uuid';
-import { AlbumEntityInterface } from '../albums/interfaces/album.entity.interface';
-import { TrackEntity } from '../tracks/entities/track.entity';
-import { AlbumEntity } from '../albums/entities/album.entity';
-import { ArtistEntity } from '../artists/entities/artist.entity';
 import { FavoriteEntity } from './entities/favorite.entity';
 import { NotInFavoritesError } from './errors/not-in-favorites.error';
 

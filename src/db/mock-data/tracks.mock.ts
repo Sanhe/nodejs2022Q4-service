@@ -39,7 +39,7 @@ export default () => [
     id: '3f980cbf-0e61-46ac-b8c1-50d7571222fa',
     name: 'KC Track 1.1',
     artistId: 'ffc57ebb-6a9e-453d-9a53-160aef4a7400',
-    albumId: '08cd97f2-13d9-4d81-a8d9-968662070dr1',
+    albumId: '64f16f3f-4923-42b7-8749-e0991b342dad',
     duration: 453,
   },
 
