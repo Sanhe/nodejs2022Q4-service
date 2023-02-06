@@ -4,15 +4,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CONFIG_PORT_KEY } from './config/defaults';
 import { useContainer } from 'class-validator';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { docsMessages } from './common/messages/docs.messages';
-
-const docConfig = new DocumentBuilder()
-  .setTitle(docsMessages.INFO_TITLE)
-  .setDescription(docsMessages.INFO_DESCRIPTION)
-  .setVersion(docsMessages.OPEN_API_VERSION)
-  .addTag(docsMessages.OPEN_API_TAG)
-  .build();
+import { SwaggerModule } from '@nestjs/swagger';
+import { getOpenApiConfig } from './config/open-api.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,6 +18,7 @@ async function bootstrap() {
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
+  const docConfig = await getOpenApiConfig();
   const document = SwaggerModule.createDocument(app, docConfig);
   SwaggerModule.setup('doc', app, document);
 
