@@ -1,13 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { DbService } from '../../db/db.service';
 import { generateUuid } from '../../common/uuid';
 import { TrackEntityInterface } from './interfaces/track.entity.interface';
+import { FavoritesService } from '../favorites/favorites.service';
+import { NotInFavoritesError } from '../favorites/errors/not-in-favorites.error';
 
 @Injectable()
 export class TracksService {
-  constructor(private readonly dbService: DbService) {}
+  constructor(
+    private readonly dbService: DbService,
+    @Inject(forwardRef(() => FavoritesService))
+    private readonly favoritesService: FavoritesService,
+  ) {}
 
   async create(createTrackDto: CreateTrackDto): Promise<TrackEntityInterface> {
     const track = {
@@ -43,5 +49,15 @@ export class TracksService {
 
   async remove(track: TrackEntityInterface): Promise<void> {
     await this.dbService.db.tracks.remove(track.id);
+
+    try {
+      await this.favoritesService.removeTrack(track.id);
+    } catch (error) {
+      const isNotInFavoritesError = error instanceof NotInFavoritesError;
+
+      if (!isNotInFavoritesError) {
+        throw error;
+      }
+    }
   }
 }

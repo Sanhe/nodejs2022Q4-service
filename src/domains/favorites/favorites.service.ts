@@ -75,9 +75,11 @@ export class FavoritesService {
       throw new NotInFavoritesError();
     }
 
+    favorite.tracks.splice(favoriteTrackIndex, 1);
+
     await this.dbService.db.favorites.update(favorite.id, {
       ...favorite,
-      tracks: favorite.tracks.slice(favoriteTrackIndex, 1),
+      tracks: favorite.tracks,
     });
   }
 
@@ -101,9 +103,11 @@ export class FavoritesService {
       throw new NotInFavoritesError();
     }
 
+    favorite.albums.splice(favoriteAlbumIndex, 1);
+
     await this.dbService.db.favorites.update(favorite.id, {
       ...favorite,
-      albums: favorite.albums.slice(favoriteAlbumIndex, 1),
+      albums: favorite.albums,
     });
   }
 
@@ -127,9 +131,11 @@ export class FavoritesService {
       throw new NotInFavoritesError();
     }
 
+    favorite.artists.splice(favoriteArtistIndex, 1);
+
     await this.dbService.db.favorites.update(favorite.id, {
       ...favorite,
-      artists: favorite.artists.slice(favoriteArtistIndex, 1),
+      artists: favorite.artists,
     });
   }
 }
