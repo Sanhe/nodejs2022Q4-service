@@ -1,3 +1,4 @@
+import { constants as httpStatus } from 'node:http2';
 import {
   Controller,
   Get,
@@ -5,7 +6,6 @@ import {
   Body,
   Param,
   Delete,
-  ParseUUIDPipe,
   NotFoundException,
   HttpCode,
   Put,
@@ -13,10 +13,9 @@ import {
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { DEFAULT_UUID_VERSION_NUMBER } from '../../common/uuid/config';
-import { constants as httpStatus } from 'http2';
 import { errorMessages } from '../../common/messages/error.messages';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { parseUUIDPipe } from '../../common/pipes/parse-uuid.pipe';
 
 @ApiTags('Albums')
 @Controller('album')
@@ -42,7 +41,7 @@ export class AlbumsController {
   @Get(':id')
   @ApiOperation({ summary: 'Get an album by id' })
   async findOne(
-    @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
+    @Param('id', parseUUIDPipe)
     id: string,
   ) {
     const album = await this.albumsService.findOne(id);
@@ -57,7 +56,7 @@ export class AlbumsController {
   @Put(':id')
   @ApiOperation({ summary: 'Update an album by id' })
   async update(
-    @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
+    @Param('id', parseUUIDPipe)
     id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
   ) {
@@ -76,7 +75,7 @@ export class AlbumsController {
   @HttpCode(httpStatus.HTTP_STATUS_NO_CONTENT)
   @ApiOperation({ summary: 'Delete an album by id' })
   async remove(
-    @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
+    @Param('id', parseUUIDPipe)
     id: string,
   ) {
     const album = await this.albumsService.findOne(id);

@@ -1,5 +1,6 @@
-import { UserEntityInterface } from '../interfaces/user.entity.interface';
+import { Exclude } from 'class-transformer';
 import { IsInt, IsString, IsUUID } from 'class-validator';
+import { UserEntityInterface } from '../interfaces/user.entity.interface';
 import { DEFAULT_UUID_VERSION_NUMBER } from '../../../common/uuid/config';
 
 export class UserEntity implements UserEntityInterface {
@@ -11,6 +12,7 @@ export class UserEntity implements UserEntityInterface {
   login: string;
 
   @IsString()
+  @Exclude()
   password: string;
 
   @IsInt()

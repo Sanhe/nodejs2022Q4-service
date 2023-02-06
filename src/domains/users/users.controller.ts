@@ -7,21 +7,23 @@ import {
   Param,
   Delete,
   Put,
-  ParseUUIDPipe,
   HttpCode,
   HttpException,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersFormatter } from './users.formatter';
-import { DEFAULT_UUID_VERSION_NUMBER } from '../../common/uuid/config';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserNotFoundException } from './errors/user-not-found.error';
 import { InvalidPasswordError } from './errors/invalid-password.error';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { parseUUIDPipe } from '../../common/pipes/parse-uuid.pipe';
 
 @ApiTags('Users')
 @Controller('user')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -48,10 +50,7 @@ export class UsersController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a user by id' })
-  async findOne(
-    @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
-    id: string,
-  ) {
+  async findOne(@Param('id', parseUUIDPipe) id: string) {
     const user = await this.usersService.findOne(id);
 
     if (!user) {
@@ -66,7 +65,7 @@ export class UsersController {
   @Put(':id')
   @ApiOperation({ summary: 'Update a user password' })
   async updatePassword(
-    @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
+    @Param('id', parseUUIDPipe)
     id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ) {
@@ -101,7 +100,7 @@ export class UsersController {
   @HttpCode(httpStatus.HTTP_STATUS_NO_CONTENT)
   @ApiOperation({ summary: 'Delete a user' })
   async remove(
-    @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
+    @Param('id', parseUUIDPipe)
     id: string,
   ) {
     const user = await this.usersService.findOne(id);

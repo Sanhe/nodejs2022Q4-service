@@ -6,17 +6,16 @@ import {
   Param,
   Delete,
   NotFoundException,
-  ParseUUIDPipe,
   HttpCode,
   Put,
 } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { DEFAULT_UUID_VERSION_NUMBER } from '../../common/uuid/config';
 import { constants as httpStatus } from 'http2';
 import { errorMessages } from '../../common/messages/error.messages';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { parseUUIDPipe } from '../../common/pipes/parse-uuid.pipe';
 
 @ApiTags('Tracks')
 @Controller('track')
@@ -42,7 +41,7 @@ export class TracksController {
   @Get(':id')
   @ApiOperation({ summary: 'Get a track by id' })
   async findOne(
-    @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
+    @Param('id', parseUUIDPipe)
     id: string,
   ) {
     const track = await this.tracksService.findOne(id);
@@ -57,7 +56,7 @@ export class TracksController {
   @Put(':id')
   @ApiOperation({ summary: 'Update a track by id' })
   async update(
-    @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
+    @Param('id', parseUUIDPipe)
     id: string,
     @Body() updateTrackDto: UpdateTrackDto,
   ) {
@@ -74,7 +73,7 @@ export class TracksController {
   @HttpCode(httpStatus.HTTP_STATUS_NO_CONTENT)
   @ApiOperation({ summary: 'Delete a track by id' })
   async remove(
-    @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
+    @Param('id', parseUUIDPipe)
     id: string,
   ) {
     const track = await this.tracksService.findOne(id);

@@ -1,12 +1,8 @@
-import { constants as httpStatus } from 'http2';
-import { forwardRef, HttpException, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { STORAGE_KEY } from '../../db/names.providers';
-import DB from '../../db/db';
 import { generateUuid } from '../../common/uuid';
 import { ArtistEntityInterface } from './interfaces/artist.entity.interface';
-import { errorMessages } from '../../common/messages/error.messages';
 import { DbService } from '../../db/db.service';
 import { FavoritesService } from '../favorites/favorites.service';
 import { NotInFavoritesError } from '../favorites/errors/not-in-favorites.error';

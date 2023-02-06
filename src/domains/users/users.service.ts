@@ -4,21 +4,19 @@ import { generateUuid } from '../../common/uuid';
 import { getCreateEntityVersion } from '../../common/version';
 import { CreateUserDtoInterface } from './interfaces/create-user.dto.interface';
 import { UpdatePasswordDtoInterface } from './interfaces/update-password.dto.interface';
-import { UserEntityInterface } from './interfaces/user.entity.interface';
 import { USER_VERSION_INCREMENT } from './users.config';
 import { DbService } from '../../db/db.service';
 import { InvalidPasswordError } from './errors/invalid-password.error';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly dbService: DbService) {}
 
-  async create(
-    createUserDto: CreateUserDtoInterface,
-  ): Promise<UserEntityInterface> {
+  async create(createUserDto: CreateUserDtoInterface): Promise<UserEntity> {
     const currentTimestamp = getCurrentTimestamp();
 
-    const user = {
+    const userData: UserEntity = {
       id: generateUuid(),
       ...createUserDto,
       version: getCreateEntityVersion(),
@@ -26,27 +24,31 @@ export class UsersService {
       updatedAt: currentTimestamp,
     };
 
+    const user = new UserEntity();
+
+    Object.assign(user, userData);
+
     await this.dbService.db.users.add(user);
 
     return user;
   }
 
-  async findAll(): Promise<UserEntityInterface[]> {
+  async findAll(): Promise<UserEntity[]> {
     const users = await this.dbService.db.users.findAll();
 
     return users;
   }
 
-  async findOne(id: string): Promise<UserEntityInterface | undefined> {
+  async findOne(id: string): Promise<UserEntity | undefined> {
     const user = await this.dbService.db.users.findById(id);
 
     return user;
   }
 
   async updatePassword(
-    user: UserEntityInterface,
+    user: UserEntity,
     updatePasswordDto: UpdatePasswordDtoInterface,
-  ): Promise<UserEntityInterface> {
+  ): Promise<UserEntity> {
     if (user.password !== updatePasswordDto.oldPassword) {
       throw new InvalidPasswordError();
     }
@@ -60,7 +62,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  async remove(user: UserEntityInterface): Promise<void> {
+  async remove(user: UserEntity): Promise<void> {
     await this.dbService.db.users.remove(user.id);
   }
 }
