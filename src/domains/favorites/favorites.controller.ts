@@ -18,6 +18,7 @@ import { NotInFavoritesError } from './errors/not-in-favorites.error';
 import { UnprocessableEntityException } from '@nestjs/common/exceptions/unprocessable-entity.exception';
 import { ArtistsService } from '../artists/artists.service';
 import { AlbumsService } from '../albums/albums.service';
+import { OutputAddedDto } from './dto/output-added.dto';
 
 @Controller('favs')
 export class FavoritesController {
@@ -39,48 +40,48 @@ export class FavoritesController {
   async addTrack(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
-  ) {
+  ): Promise<OutputAddedDto> {
     const track = await this.trackService.findOne(id);
 
     if (!track) {
       throw new UnprocessableEntityException(errorMessages.TRACK_NOT_FOUND);
     }
 
-    const fav = await this.favoritesService.addTrack(track.id);
+    await this.favoritesService.addTrack(track.id);
 
-    return fav;
+    return { added: true, message: `Track ${track.id} added to favorites` };
   }
 
   @Post('artist/:id')
   async addArtist(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
-  ) {
+  ): Promise<OutputAddedDto> {
     const artist = await this.artistService.findOne(id);
 
     if (!artist) {
       throw new UnprocessableEntityException(errorMessages.ARTIST_NOT_FOUND);
     }
 
-    const fav = await this.favoritesService.addArtist(artist.id);
+    await this.favoritesService.addArtist(artist.id);
 
-    return fav;
+    return { added: true, message: `Artist ${artist.id} added to favorites` };
   }
 
   @Post('album/:id')
   async addAlbum(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
-  ) {
+  ): Promise<OutputAddedDto> {
     const album = await this.albumService.findOne(id);
 
     if (!album) {
       throw new UnprocessableEntityException(errorMessages.ALBUM_NOT_FOUND);
     }
 
-    const fav = await this.favoritesService.addAlbum(album.id);
+    await this.favoritesService.addAlbum(album.id);
 
-    return fav;
+    return { added: true, message: `Album ${album.id} added to favorites` };
   }
 
   @Delete('track/:id')
