@@ -16,12 +16,15 @@ import { UpdateArtistDto } from './dto/update-artist.dto';
 import { DEFAULT_UUID_VERSION_NUMBER } from '../../common/uuid/config';
 import { constants as httpStatus } from 'http2';
 import { errorMessages } from '../../common/messages/error.messages';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Artists')
 @Controller('artist')
 export class ArtistsController {
   constructor(private readonly artistsService: ArtistsService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create an artist' })
   async create(@Body() createArtistDto: CreateArtistDto) {
     const artist = await this.artistsService.create(createArtistDto);
 
@@ -29,11 +32,13 @@ export class ArtistsController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all artists' })
   async findAll() {
     return await this.artistsService.findAll();
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get an artist by id' })
   async findOne(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
@@ -48,6 +53,7 @@ export class ArtistsController {
   }
 
   @Put(':id')
+  @ApiOperation({ summary: 'Update an artist by id' })
   async update(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
@@ -69,6 +75,7 @@ export class ArtistsController {
 
   @Delete(':id')
   @HttpCode(httpStatus.HTTP_STATUS_NO_CONTENT)
+  @ApiOperation({ summary: 'Delete an artist by id' })
   async remove(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,

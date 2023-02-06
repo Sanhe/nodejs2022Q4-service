@@ -18,7 +18,9 @@ import { DEFAULT_UUID_VERSION_NUMBER } from '../../common/uuid/config';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserNotFoundException } from './errors/user-not-found.error';
 import { InvalidPasswordError } from './errors/invalid-password.error';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('user')
 export class UsersController {
   constructor(
@@ -27,6 +29,7 @@ export class UsersController {
   ) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a new user' })
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto);
     const formattedUser = this.usersFormatter.formatUserToOutput(user);
@@ -35,6 +38,7 @@ export class UsersController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all users' })
   async findAll() {
     const users = await this.usersService.findAll();
     const formattedUsers = this.usersFormatter.formatUsersToOutput(users);
@@ -43,6 +47,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get a user by id' })
   async findOne(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
@@ -59,6 +64,7 @@ export class UsersController {
   }
 
   @Put(':id')
+  @ApiOperation({ summary: 'Update a user password' })
   async updatePassword(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
@@ -93,6 +99,7 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(httpStatus.HTTP_STATUS_NO_CONTENT)
+  @ApiOperation({ summary: 'Delete a user' })
   async remove(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,

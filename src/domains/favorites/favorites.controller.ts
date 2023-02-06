@@ -19,7 +19,9 @@ import { UnprocessableEntityException } from '@nestjs/common/exceptions/unproces
 import { ArtistsService } from '../artists/artists.service';
 import { AlbumsService } from '../albums/albums.service';
 import { OutputAddedDto } from './dto/output-added.dto';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Favorites')
 @Controller('favs')
 export class FavoritesController {
   constructor(
@@ -30,6 +32,7 @@ export class FavoritesController {
   ) {}
 
   @Get()
+  @ApiOperation({ summary: 'Get all favorites' })
   async findAll() {
     const favorites = await this.favoritesService.findAll();
 
@@ -37,6 +40,7 @@ export class FavoritesController {
   }
 
   @Post('track/:id')
+  @ApiOperation({ summary: 'Add a track to favorites by id' })
   async addTrack(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
@@ -53,6 +57,7 @@ export class FavoritesController {
   }
 
   @Post('artist/:id')
+  @ApiOperation({ summary: 'Add an artist to favorites by id' })
   async addArtist(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
@@ -69,6 +74,7 @@ export class FavoritesController {
   }
 
   @Post('album/:id')
+  @ApiOperation({ summary: 'Add an album to favorites by id' })
   async addAlbum(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
@@ -86,6 +92,7 @@ export class FavoritesController {
 
   @Delete('track/:id')
   @HttpCode(httpStatus.HTTP_STATUS_NO_CONTENT)
+  @ApiOperation({ summary: 'Remove a track from favorites by id' })
   async removeTrack(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
@@ -109,6 +116,7 @@ export class FavoritesController {
 
   @Delete('artist/:id')
   @HttpCode(httpStatus.HTTP_STATUS_NO_CONTENT)
+  @ApiOperation({ summary: 'Remove an artist from favorites by id' })
   async removeArtist(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
@@ -132,6 +140,7 @@ export class FavoritesController {
 
   @Delete('album/:id')
   @HttpCode(httpStatus.HTTP_STATUS_NO_CONTENT)
+  @ApiOperation({ summary: 'Remove an album from favorites by id' })
   async removeAlbum(
     @Param('id', new ParseUUIDPipe({ version: DEFAULT_UUID_VERSION_NUMBER }))
     id: string,
