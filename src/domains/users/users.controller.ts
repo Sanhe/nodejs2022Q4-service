@@ -20,6 +20,7 @@ import { UserNotFoundException } from './errors/user-not-found.error';
 import { InvalidPasswordError } from './errors/invalid-password.error';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { parseUUIDPipe } from '../../common/pipes/parse-uuid.pipe';
+import { UserEntity } from './entities/user.entity';
 
 @ApiTags('Users')
 @Controller('user')
@@ -39,6 +40,7 @@ export class UsersController {
     return formattedUser;
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   @ApiOperation({ summary: 'Get all users' })
   async findAll() {

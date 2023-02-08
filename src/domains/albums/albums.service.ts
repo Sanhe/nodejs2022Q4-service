@@ -11,7 +11,6 @@ import { NotInFavoritesError } from '../favorites/errors/not-in-favorites.error'
 export class AlbumsService {
   constructor(
     private readonly dbService: DbService,
-    @Inject(forwardRef(() => FavoritesService))
     private readonly favoritesService: FavoritesService,
   ) {}
 
