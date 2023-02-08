@@ -25,7 +25,7 @@ git checkout feature/rest-service
 npm install
 ```
 
-### Copying `.env.example` to `.env` and updating the API port value if needed
+### Copying `.env.example` to `.env` and updating if needed
 
 ```
 cp .env.example .env
@@ -36,8 +36,39 @@ Notes
 into account that this data can be inconsistent. For example, the album with id 1 has an 
 artist with id 5, but the artist with id 5 doesn't exist in the artists list.
 
+### Docker
+
+#### Building docker-compose
+
+```bash
+docker-compose build
+```
+
+#### Or build and run at the same time
+
+```bash
+docker-compose up --build
+```
+
+#### Running docker-compose
+
+```bash
+docker-compose up
+```
+
+If you want to go into container:
+```bash
+docker exec -it <container name> /bin/sh 
+```
+
+I.e. database container name is `nodejs2022q4-service_db_1` and you can go into it by typing:
+```bash
+docker exec -it nodejs2022q4-service_db_1 /bin/sh
+```
+
 
 ## Running application
+
 
 ```
 npm start
