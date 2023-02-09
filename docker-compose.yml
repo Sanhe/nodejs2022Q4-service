@@ -19,6 +19,22 @@ services:
     networks:
       - app-network
 
+  api:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      target: ${DOCKER_API_TARGET}
+    restart: always
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./src/:/usr/app/src/
+      - /usr/app/node_modules
+    depends_on:
+      - db
+    networks:
+      - app-network
+
 volumes:
   db-data:
   db-logs:

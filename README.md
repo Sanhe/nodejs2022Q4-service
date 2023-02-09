@@ -36,7 +36,30 @@ Notes
 into account that this data can be inconsistent. For example, the album with id 1 has an 
 artist with id 5, but the artist with id 5 doesn't exist in the artists list.
 
-### Docker
+## Docker
+
+### Prerequisites
+
+You can configure the target of the application in the `.env` file to build docker for 
+particular stage.
+
+Development stage:
+```bash
+DOCKER_API_TARGET=api_development
+```
+Production stage:
+```bash
+DOCKER_API_TARGET=api_build
+```
+* See `Dockerfile` for more information.
+
+Tests are included into the docker container to be able to run them there.
+
+Some files and directories are excluded from the docker image to reduce its size.
+See `.dockerignore` file for more information.
+
+
+### Building and running
 
 #### Building docker-compose
 
@@ -61,13 +84,24 @@ If you want to go into container:
 docker exec -it <container name> /bin/sh 
 ```
 
-I.e. database container name is `nodejs2022q4-service_db_1` and you can go into it by typing:
+The database container name is `nodejs2022q4-service_db_1` and you can go into it by typing:
 ```bash
 docker exec -it nodejs2022q4-service_db_1 /bin/sh
 ```
 
+The application container name is `nodejs2022q4-service_api_1` and you can go into it by typing:
+```bash
+docker exec -it nodejs2022q4-service_api_1 /bin/sh 
+```
 
-## Running application
+#### Stopping docker-compose
+
+```bash
+docker-compose down
+```
+
+
+## Running application without docker
 
 
 ```
