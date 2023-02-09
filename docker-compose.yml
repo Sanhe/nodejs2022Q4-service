@@ -5,6 +5,8 @@ services:
     build:
       context: ./database
       dockerfile: ./Dockerfile
+    image: db:latest
+    container_name: db
     restart: always
     environment:
       - POSTGRES_USER=${DATABASE_USER}
@@ -24,6 +26,8 @@ services:
       context: ./
       dockerfile: ./Dockerfile
       target: ${DOCKER_API_TARGET}
+    image: api:latest
+    container_name: api
     restart: always
     ports:
       - ${PORT}:${PORT}

@@ -84,20 +84,59 @@ If you want to go into container:
 docker exec -it <container name> /bin/sh 
 ```
 
-The database container name is `nodejs2022q4-service_db_1` and you can go into it by typing:
+The database container name is `db` and you can go into it by typing:
 ```bash
-docker exec -it nodejs2022q4-service_db_1 /bin/sh
+docker exec -it db /bin/sh
 ```
 
-The application container name is `nodejs2022q4-service_api_1` and you can go into it by typing:
+The application container name is `api` and you can go into it by typing:
 ```bash
-docker exec -it nodejs2022q4-service_api_1 /bin/sh 
+docker exec -it api /bin/sh 
 ```
 
 #### Stopping docker-compose
 
 ```bash
 docker-compose down
+```
+
+#### How create a docker image separately
+
+```bash
+docker build -t <image name> .
+```
+
+#### Scan docker images for vulnerabilities
+Your system should be configured to run docker scan. For more information please visit
+https://docs.docker.com/engine/scan/.
+
+Docker scan is configured to run by npm. 
+
+Scan api image:
+```bash
+npm run docker:scan:api
+```
+
+Scan db image:
+```bash
+npm run docker:scan:db
+```
+
+#### Uploading docker images to docker hub
+
+Save the image by container ID:
+```bash
+docker container commit <container id> shautsou/nodejs2022q4
+```
+
+A new tag can be created by adding `:<tag>` to the end of the image name. For example:
+```bash
+docker image tag shautsou/nodejs2022q4 shautsou/nodejs2022q4:api
+```
+
+Then push the image to docker hub:
+```bash
+docker push shautsou/nodejs2022q4:api
 ```
 
 
