@@ -29,6 +29,9 @@ services:
     image: api:latest
     container_name: api
     restart: always
+    environment:
+      PORT: ${PORT}
+      DATABASE_URL: ${DATABASE_URL}
     ports:
       - ${PORT}:${PORT}
     volumes:
