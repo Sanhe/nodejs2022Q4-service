@@ -11,7 +11,7 @@ export class AlbumExistsConstraint implements ValidatorConstraintInterface {
   constructor(private readonly albumsService: AlbumsService) {}
 
   async validate(albumId: string): Promise<boolean> {
-    const album = await this.albumsService.findOne(albumId);
+    const album = await this.albumsService.findOne(albumId.toString());
 
     return !!album;
   }

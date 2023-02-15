@@ -12,7 +12,6 @@ COPY tsconfig.json ./
 
 RUN npm ci
 RUN npx prisma generate
-#RUN npx prisma migrate dev
 
 COPY . ./
 

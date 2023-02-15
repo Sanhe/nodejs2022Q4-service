@@ -78,12 +78,6 @@ docker-compose build
 docker-compose up --build
 ```
 
-#### Run prisma migrations
-
-```bash
-docker-compose run api npx prisma migrate dev --name init
-```
-
 #### Running docker-compose
 
 ```bash
@@ -103,6 +97,12 @@ docker exec -it db /bin/sh
 The application container name is `api` and you can go into it by typing:
 ```bash
 docker exec -it api /bin/sh 
+```
+
+#### Run prisma migrations
+
+```bash
+docker-compose run api npx prisma migrate dev --name init
 ```
 
 #### Stopping docker-compose
@@ -150,6 +150,11 @@ Then push the image to docker hub:
 docker push shautsou/nodejs2022q4:api
 ```
 
+#### Running tests in docker container
+
+```bash
+docker compose exec api npm run test
+```
 
 ## Running application 
 

@@ -11,7 +11,7 @@ export class ArtistExistsConstraint implements ValidatorConstraintInterface {
   constructor(private readonly artistsService: ArtistsService) {}
 
   async validate(artistId: string): Promise<boolean> {
-    const artist = await this.artistsService.findOne(artistId);
+    const artist = await this.artistsService.findOne(artistId.toString());
 
     return !!artist;
   }
