@@ -76,4 +76,26 @@ export class TracksService {
     //   }
     // }
   }
+
+  async removeAlbumFromTracks(albumId: string): Promise<void> {
+    await this.prismaService.track.updateMany({
+      where: {
+        albumId,
+      },
+      data: {
+        albumId: null,
+      },
+    });
+  }
+
+  async removeArtistFromTracks(artistId: string): Promise<void> {
+    await this.prismaService.track.updateMany({
+      where: {
+        artistId,
+      },
+      data: {
+        artistId: null,
+      },
+    });
+  }
 }

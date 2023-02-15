@@ -6,12 +6,16 @@ import { FavoritesService } from '../favorites/favorites.service';
 import { NotInFavoritesError } from '../favorites/errors/not-in-favorites.error';
 import { PrismaService } from '../../prisma.service';
 import { Artist } from '@prisma/client';
+import { TracksService } from '../tracks/tracks.service';
+import { AlbumsService } from '../albums/albums.service';
 
 @Injectable()
 export class ArtistsService {
   constructor(
     private readonly favoritesService: FavoritesService,
     private readonly prismaService: PrismaService,
+    private readonly tracksService: TracksService,
+    private readonly albumsService: AlbumsService,
   ) {}
 
   async create(createArtistDto: CreateArtistDto): Promise<Artist> {
@@ -74,29 +78,9 @@ export class ArtistsService {
     //     throw error;
     //   }
     // }
-    //
-    // const tracks = await this.dbService.db.tracks.findByField(
-    //   'artistId',
-    //   artist.id,
-    // );
-    //
-    // tracks.forEach(async (track) => {
-    //   await this.dbService.db.tracks.update(track.id, {
-    //     ...track,
-    //     artistId: null,
-    //   });
-    // });
-    //
-    // const albums = await this.dbService.db.albums.findByField(
-    //   'artistId',
-    //   artist.id,
-    // );
-    //
-    // albums.forEach(async (album) => {
-    //   await this.dbService.db.albums.update(album.id, {
-    //     ...album,
-    //     artistId: null,
-    //   });
-    // });
+
+    await this.tracksService.removeArtistFromTracks(artist.id);
+
+    await this.albumsService.removeArtistFromAlbums(artist.id);
   }
 }

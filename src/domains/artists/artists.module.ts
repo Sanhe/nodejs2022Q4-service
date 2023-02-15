@@ -6,6 +6,8 @@ import { FavoritesModule } from '../favorites/favorites.module';
 import { FavoritesService } from '../favorites/favorites.service';
 import { ArtistExistsConstraint } from './validators/artist-exists.constraint';
 import { PrismaService } from '../../prisma.service';
+import { TracksService } from '../tracks/tracks.service';
+import { AlbumsService } from '../albums/albums.service';
 
 @Module({
   controllers: [ArtistsController],
@@ -15,6 +17,8 @@ import { PrismaService } from '../../prisma.service';
     FavoritesService,
     ArtistExistsConstraint,
     PrismaService,
+    TracksService,
+    AlbumsService,
   ],
 })
 export class ArtistsModule {}
