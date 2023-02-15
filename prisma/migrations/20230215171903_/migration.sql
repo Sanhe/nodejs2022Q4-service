@@ -22,9 +22,9 @@ CREATE TABLE "Artist" (
 -- CreateTable
 CREATE TABLE "Album" (
     "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "year" INTEGER NOT NULL,
-    "artistId" TEXT NOT NULL,
+    "artistId" TEXT,
 
     CONSTRAINT "Album_pkey" PRIMARY KEY ("id")
 );
@@ -34,8 +34,8 @@ CREATE TABLE "Track" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "duration" INTEGER NOT NULL,
-    "artistId" TEXT NOT NULL,
-    "albumId" TEXT NOT NULL,
+    "artistId" TEXT,
+    "albumId" TEXT,
 
     CONSTRAINT "Track_pkey" PRIMARY KEY ("id")
 );

@@ -8,6 +8,7 @@ import { ArtistsModule } from '../artists/artists.module';
 import { ArtistExistsConstraint } from '../artists/validators/artist-exists.constraint';
 import { ArtistsService } from '../artists/artists.service';
 import { AlbumExistsConstraint } from './validators/album-exists.constraint';
+import { PrismaService } from '../../prisma.service';
 
 @Module({
   controllers: [AlbumsController],
@@ -18,7 +19,7 @@ import { AlbumExistsConstraint } from './validators/album-exists.constraint';
     FavoritesService,
     ArtistsService,
     ArtistExistsConstraint,
+    PrismaService,
   ],
-  // exports: [AlbumsService, AlbumExistsConstraint],
 })
 export class AlbumsModule {}

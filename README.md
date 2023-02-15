@@ -36,6 +36,11 @@ Notes
 into account that this data can be inconsistent. For example, the album with id 1 has an 
 artist with id 5, but the artist with id 5 doesn't exist in the artists list.
 
+Also, you can copy `.env.example` to `.env.local` with 
+```dotenv
+DATABASE_HOST=localhost
+```
+
 ## Docker
 
 ### Prerequisites
@@ -71,6 +76,12 @@ docker-compose build
 
 ```bash
 docker-compose up --build
+```
+
+#### Run prisma migrations
+
+```bash
+docker-compose run api npx prisma migrate dev --name init
 ```
 
 #### Running docker-compose

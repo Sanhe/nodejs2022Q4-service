@@ -10,6 +10,7 @@ import { ArtistsService } from '../artists/artists.service';
 import { AlbumsModule } from '../albums/albums.module';
 import { AlbumExistsConstraint } from '../albums/validators/album-exists.constraint';
 import { AlbumsService } from '../albums/albums.service';
+import { PrismaService } from '../../prisma.service';
 
 @Module({
   controllers: [TracksController],
@@ -26,6 +27,7 @@ import { AlbumsService } from '../albums/albums.service';
     AlbumExistsConstraint,
     AlbumsService,
     FavoritesService,
+    PrismaService,
   ],
   exports: [TracksService],
 })

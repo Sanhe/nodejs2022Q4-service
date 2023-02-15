@@ -5,10 +5,16 @@ import { DbModule } from '../../db/db.module';
 import { FavoritesModule } from '../favorites/favorites.module';
 import { FavoritesService } from '../favorites/favorites.service';
 import { ArtistExistsConstraint } from './validators/artist-exists.constraint';
+import { PrismaService } from '../../prisma.service';
 
 @Module({
   controllers: [ArtistsController],
   imports: [DbModule, forwardRef(() => FavoritesModule)],
-  providers: [ArtistsService, FavoritesService, ArtistExistsConstraint],
+  providers: [
+    ArtistsService,
+    FavoritesService,
+    ArtistExistsConstraint,
+    PrismaService,
+  ],
 })
 export class ArtistsModule {}

@@ -20,25 +20,25 @@ model Artist {
   id        String   @id @default(uuid())
   name      String
   grammy    Boolean  @default(false)
-  Albums    Album[]
-  Tracks    Track[]
+  albums    Album[]
+  tracks    Track[]
 }
 
 model Album {
   id        String   @id @default(uuid())
-  title     String
+  name      String
   year      Int
-  artist    Artist   @relation(fields: [artistId], references: [id], onDelete: SetNull)
-  artistId  String
-  Tracks    Track[]
+  artist    Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  artistId  String?
+  tracks    Track[]
 }
 
 model Track {
   id        String   @id @default(uuid())
   name      String
   duration  Int
-  artist    Artist   @relation(fields: [artistId], references: [id], onDelete: SetNull)
-  artistId  String
-  album     Album    @relation(fields: [albumId], references: [id], onDelete: SetNull)
-  albumId   String
+  artist    Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  artistId  String?
+  album     Album?   @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  albumId   String?
 }
