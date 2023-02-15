@@ -6,8 +6,13 @@ FROM node:${NODE_VERSION}-alpine as api_development
 WORKDIR /usr/app
 
 COPY package*.json ./
+COPY prisma ./prisma
+COPY .env ./
+COPY tsconfig.json ./
 
 RUN npm ci
+RUN npx prisma generate
+#RUN npx prisma migrate dev
 
 COPY . ./
 

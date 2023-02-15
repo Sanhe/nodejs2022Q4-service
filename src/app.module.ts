@@ -7,6 +7,7 @@ import { TracksModule } from './domains/tracks/tracks.module';
 import { DbModule } from './db/db.module';
 import { AppService } from './app.service';
 import { ConfigurationModule } from './config/configuration.module';
+import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { ConfigurationModule } from './config/configuration.module';
     TracksModule,
     FavoritesModule,
   ],
-  providers: [AppService],
-  exports: [AppService],
+  providers: [AppService, PrismaService],
+  exports: [AppService, PrismaService],
 })
 export class AppModule {}
