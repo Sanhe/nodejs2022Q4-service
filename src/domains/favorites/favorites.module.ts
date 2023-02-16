@@ -13,7 +13,6 @@ import { PrismaService } from '../../prisma.service';
 @Module({
   controllers: [FavoritesController],
   imports: [
-    DbModule,
     forwardRef(() => TracksModule),
     forwardRef(() => ArtistsModule),
     forwardRef(() => AlbumsModule),

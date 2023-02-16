@@ -156,6 +156,11 @@ docker push shautsou/nodejs2022q4:api
 docker compose exec api npm run test
 ```
 
+Or you can use npm command:
+```bash
+npm run docker:api:test
+```
+
 ## Running application 
 
 

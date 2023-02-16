@@ -18,6 +18,8 @@ import { AlbumsService } from '../albums/albums.service';
 import { OutputAddedDto } from './dto/output-added.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { parseUUIDPipe } from '../../common/pipes/parse-uuid.pipe';
+import { ConflictException } from '@nestjs/common/exceptions/conflict.exception';
+import { AlreadyInFavoritesError } from './errors/already-in-favorites.error';
 
 @ApiTags('Favorites')
 @Controller('favs')
@@ -49,7 +51,15 @@ export class FavoritesController {
       throw new UnprocessableEntityException(errorMessages.TRACK_NOT_FOUND);
     }
 
-    await this.favoritesService.addTrack(track.id);
+    try {
+      await this.favoritesService.addTrack(track.id);
+    } catch (e) {
+      if (e instanceof AlreadyInFavoritesError) {
+        throw new ConflictException(e.message);
+      }
+
+      throw e;
+    }
 
     return { added: true, message: `Track ${track.id} added to favorites` };
   }
@@ -66,7 +76,15 @@ export class FavoritesController {
       throw new UnprocessableEntityException(errorMessages.ARTIST_NOT_FOUND);
     }
 
-    await this.favoritesService.addArtist(artist.id);
+    try {
+      await this.favoritesService.addArtist(artist.id);
+    } catch (e) {
+      if (e instanceof AlreadyInFavoritesError) {
+        throw new ConflictException(e.message);
+      }
+
+      throw e;
+    }
 
     return { added: true, message: `Artist ${artist.id} added to favorites` };
   }
@@ -83,7 +101,15 @@ export class FavoritesController {
       throw new UnprocessableEntityException(errorMessages.ALBUM_NOT_FOUND);
     }
 
-    await this.favoritesService.addAlbum(album.id);
+    try {
+      await this.favoritesService.addAlbum(album.id);
+    } catch (e) {
+      if (e instanceof AlreadyInFavoritesError) {
+        throw new ConflictException(e.message);
+      }
+
+      throw e;
+    }
 
     return { added: true, message: `Album ${album.id} added to favorites` };
   }

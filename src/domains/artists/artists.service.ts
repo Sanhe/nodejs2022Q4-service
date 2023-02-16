@@ -68,16 +68,15 @@ export class ArtistsService {
       },
     });
 
-    // TODO: update this code to use Prisma
-    // try {
-    //   await this.favoritesService.removeArtist(artist.id);
-    // } catch (error) {
-    //   const isNotInFavoritesError = error instanceof NotInFavoritesError;
-    //
-    //   if (!isNotInFavoritesError) {
-    //     throw error;
-    //   }
-    // }
+    try {
+      await this.favoritesService.removeArtist(artist.id);
+    } catch (error) {
+      const isNotInFavoritesError = error instanceof NotInFavoritesError;
+
+      if (!isNotInFavoritesError) {
+        throw error;
+      }
+    }
 
     await this.tracksService.removeArtistFromTracks(artist.id);
 

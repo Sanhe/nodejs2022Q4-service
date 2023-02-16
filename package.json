@@ -21,6 +21,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "docker:scan:api": "docker scan api",
     "docker:scan:db": "docker scan db",
+    "docker:api:test": "docker compose exec api npm run test",
     "migrate:postgres": "dotenv -e .env.local -- prisma migrate dev --name init"
   },
   "dependencies": {

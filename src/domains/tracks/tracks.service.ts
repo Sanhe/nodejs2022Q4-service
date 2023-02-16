@@ -65,16 +65,15 @@ export class TracksService {
       },
     });
 
-    // TODO: update this code to use Prisma
-    // try {
-    //   await this.favoritesService.removeTrack(track.id);
-    // } catch (error) {
-    //   const isNotInFavoritesError = error instanceof NotInFavoritesError;
-    //
-    //   if (!isNotInFavoritesError) {
-    //     throw error;
-    //   }
-    // }
+    try {
+      await this.favoritesService.removeTrack(track.id);
+    } catch (error) {
+      const isNotInFavoritesError = error instanceof NotInFavoritesError;
+
+      if (!isNotInFavoritesError) {
+        throw error;
+      }
+    }
   }
 
   async removeAlbumFromTracks(albumId: string): Promise<void> {
