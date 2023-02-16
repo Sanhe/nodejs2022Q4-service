@@ -6,14 +6,12 @@ FROM node:${NODE_VERSION}-alpine as api_development
 WORKDIR /usr/app
 
 COPY package*.json ./
-COPY prisma ./prisma
-COPY .env ./
-COPY tsconfig.json ./
 
 RUN npm ci
-RUN npx prisma generate
 
 COPY . ./
+
+RUN npx prisma generate
 
 CMD [ "npm", "run", "start:dev" ]
 
