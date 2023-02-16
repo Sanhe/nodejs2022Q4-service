@@ -1,47 +1,57 @@
 # Home Library Service
 
+## Description
+A NestJS RESTful API service for home library with CRUD operations for tracks, albums, artists and favorites.
+It uses Docker, PostgreSQL, Prisma, Swagger, Jest, ESLint, Prettier, Lint-Staged.
+
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+- Docker - [Download & Install Docker](https://docs.docker.com/get-docker/).
 
 ## Getting Started
 
-### Downloading
+### Download the project
 
 ```
 git clone git@github.com:Sanhe/nodejs2022Q4-service.git
 ```
 
-### Switching to dev branch `feature/rest-service`
+### Go to the project directory
 
 ```
-git checkout feature/rest-service
+cd nodejs2022Q4-service
 ```
 
-### Installing NPM modules
+### Switch to the appropriate branch `feature/containerization-database-orm`
 
 ```
-npm install
+git checkout feature/containerization-database-orm
 ```
 
-### Copying `.env.example` to `.env` and updating if needed
+### Copy `.env.example` to `.env` and update it if needed
 
 ```
 cp .env.example .env
 ```
 Notes 
 * The default API port is 4000.
-* If you need default preset data, set `USE_INITIAL_MOCK_DATA=true` in `.env` file. Take
-into account that this data can be inconsistent. For example, the album with id 1 has an 
-artist with id 5, but the artist with id 5 doesn't exist in the artists list.
+* The default database port is 5432.
 
-Also, you can copy `.env.example` to `.env.local` with 
-```dotenv
-DATABASE_HOST=localhost
+### Make install
+
+```
+npm install
 ```
 
-## Docker
+
+## Running the app
+
+After starting the app on port (4000 as default and can be changed in `.env` file on `PORT` variable) you can open
+in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
+For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
 
 ### Prerequisites
 
@@ -58,7 +68,7 @@ DOCKER_API_TARGET=api_build
 ```
 * See `Dockerfile` for more information.
 
-Tests are included into the docker container to be able to run them there.
+Tests are included into the docker container to be able to run them inside.
 
 Some files and directories are excluded from the docker image to reduce its size.
 See `.dockerignore` file for more information.
@@ -89,12 +99,12 @@ If you want to go into container:
 docker exec -it <container name> /bin/sh 
 ```
 
-The database container name is `db` and you can go into it by typing:
+The database container name is `db` and you can go into it by the next command:
 ```bash
 docker exec -it db /bin/sh
 ```
 
-The application container name is `api` and you can go into it by typing:
+The application container name is `api` and you can go into it by the next command:
 ```bash
 docker exec -it api /bin/sh 
 ```
@@ -161,34 +171,22 @@ Or you can use npm command:
 npm run docker:api:test
 ```
 
-## Running application 
-
-
-After starting the app on port (4000 as default and can be changed in `.env` file on `PORT` variable) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
-
-### Notes
-
-* There is no validation if a track, album or artist already added to the favorites. So we
-have 201 Created response even if the element already exists in favorites.
 
 
 ## Testing
 
-After application running open new terminal and enter:
+After application running by docker open new terminal and enter:
 
-To run all tests without authorization
-
-```
-npm run test
+```bash
+docker compose exec api npm run test
 ```
 
-To run only one of all test suites
+Or you can use npm command:
+```bash
+npm run docker:api:test
+```
 
-```
-npm run test -- <path to suite>
-```
+## Lint
 
 ### Auto-fix and format
 
