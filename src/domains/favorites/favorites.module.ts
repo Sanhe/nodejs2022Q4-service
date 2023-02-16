@@ -1,7 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
 import { FavoritesController } from './favorites.controller';
-import { DbModule } from '../../db/db.module';
 import { TracksService } from '../tracks/tracks.service';
 import { TracksModule } from '../tracks/tracks.module';
 import { ArtistsService } from '../artists/artists.service';

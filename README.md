@@ -188,11 +188,18 @@ npm run docker:api:test
 
 ## Lint
 
-### Auto-fix and format
+### Check
 
 ```
 npm run lint
 ```
+
+Or in docker container:
+```
+npm run docker:api:lint
+```
+
+### Format
 
 ```
 npm run format

@@ -1,7 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { ArtistsController } from './artists.controller';
-import { DbModule } from '../../db/db.module';
 import { FavoritesModule } from '../favorites/favorites.module';
 import { FavoritesService } from '../favorites/favorites.service';
 import { ArtistExistsConstraint } from './validators/artist-exists.constraint';
@@ -11,7 +10,7 @@ import { AlbumsService } from '../albums/albums.service';
 
 @Module({
   controllers: [ArtistsController],
-  imports: [DbModule, forwardRef(() => FavoritesModule)],
+  imports: [forwardRef(() => FavoritesModule)],
   providers: [
     ArtistsService,
     FavoritesService,
