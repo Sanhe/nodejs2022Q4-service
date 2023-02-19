@@ -110,7 +110,7 @@ npm run docker:scan:db
 #### Running tests in docker container
 
 ```bash
-docker compose exec api npm run test
+docker-compose exec api npm run test
 ```
 
 Or you can use npm command:
@@ -221,7 +221,7 @@ Tests don't work in `production` mode.
 After application running by docker in `development` mode open new terminal and enter:
 
 ```bash
-docker compose exec api npm run test
+docker-compose exec api npm run test
 ```
 
 Or you can use npm command:

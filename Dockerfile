@@ -19,7 +19,7 @@ RUN npm run build
 CMD [ "npm", "run", "start:dev" ]
 
 
-# "build" stage
+# "production" stage
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} as api_production
 
 WORKDIR /usr/app

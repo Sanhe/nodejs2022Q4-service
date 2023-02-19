@@ -21,9 +21,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "docker:scan:api": "docker scan api",
     "docker:scan:db": "docker scan db",
-    "docker:api:migrate": "docker compose exec api npx prisma migrate dev --name init",
-    "docker:api:test": "docker compose exec api npm run test",
-    "docker:api:lint": "docker compose exec api npm run lint"
+    "docker:api:migrate": "docker-compose exec api npx prisma migrate dev --name init",
+    "docker:api:test": "docker-compose exec api npm run test",
+    "docker:api:lint": "docker-compose exec api npm run lint"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
