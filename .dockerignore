@@ -13,7 +13,8 @@
 database/
 dist/
 build/
-docs/
+doc/
+!doc/api.yaml
 node_modules/
 .idea/
 .editorconfig

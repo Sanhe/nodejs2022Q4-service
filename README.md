@@ -64,8 +64,9 @@ DOCKER_API_TARGET=api_development
 ```
 Production stage:
 ```bash
-DOCKER_API_TARGET=api_build
+DOCKER_API_TARGET=api_production
 ```
+
 * See `Dockerfile` for more information.
 
 Tests are included into the docker container to be able to run them inside.
@@ -76,55 +77,16 @@ See `.dockerignore` file for more information.
 
 ### Building and running
 
-#### Building docker-compose
-
-```bash
-docker-compose build
-```
-
-#### Or build and run at the same time
+#### Build and run docker-compose
 
 ```bash
 docker-compose up --build
-```
-
-#### Running docker-compose
-
-```bash
-docker-compose up
-```
-
-If you want to go into container:
-```bash
-docker exec -it <container name> /bin/sh 
-```
-
-The database container name is `db` and you can go into it by the next command:
-```bash
-docker exec -it db /bin/sh
-```
-
-The application container name is `api` and you can go into it by the next command:
-```bash
-docker exec -it api /bin/sh 
 ```
 
 #### Run prisma migrations
 
 ```bash
 docker-compose run api npx prisma migrate dev --name init
-```
-
-#### Stopping docker-compose
-
-```bash
-docker-compose down
-```
-
-#### How create a docker image separately
-
-```bash
-docker build -t <image name> .
 ```
 
 #### Scan docker images for vulnerabilities
@@ -143,22 +105,7 @@ Scan db image:
 npm run docker:scan:db
 ```
 
-#### Uploading docker images to docker hub
-
-Save the image by container ID:
-```bash
-docker container commit <container id> shautsou/nodejs2022q4
-```
-
-A new tag can be created by adding `:<tag>` to the end of the image name. For example:
-```bash
-docker image tag shautsou/nodejs2022q4 shautsou/nodejs2022q4:api
-```
-
-Then push the image to docker hub:
-```bash
-docker push shautsou/nodejs2022q4:api
-```
+*Note:* Fixing vulnerabilities in the api image is out of the scope.
 
 #### Running tests in docker container
 
@@ -171,11 +118,107 @@ Or you can use npm command:
 npm run docker:api:test
 ```
 
+### Other useful commands
+
+#### Build docker-compose
+
+```bash
+docker-compose build
+```
+
+#### Running docker-compose
+
+```bash
+docker-compose up
+```
+
+#### Build and run at the same time
+
+```bash
+docker-compose up --build
+```
+
+If you want to go into container:
+```bash
+docker exec -it <container name> /bin/sh 
+```
+
+The database container name is `db` and you can go into it by the next command:
+```bash
+docker exec -it db /bin/sh
+```
+
+The application container name is `api` and you can go into it by the next command:
+```bash
+docker exec -it api /bin/sh 
+```
+
+#### Stopping docker-compose
+
+If you want to stop docker containers:
+
+```bash
+docker-compose down
+```
+
+#### How create a docker image separately
+
+```bash
+docker build -t <image name> .
+```
+
+#### Uploading docker images to docker hub
+
+Save the image by container ID:
+```bash
+docker container commit <container id> <image name>
+```
+
+I.e.:
+```bash
+docker container commit api shautsou/nodejs2022q4-api
+```
+
+A new tag can be created by adding `:<tag>` to the end of the image name. For example, to create a tag called `last`:
+```bash
+docker image tag shautsou/nodejs2022q4-api shautsou/nodejs2022q4-api:last
+```
+
+Then push the image to docker hub:
+```bash
+docker push shautsou/nodejs2022q4-api
+```
+
+*Note:* The same is for the database image, i.e. `shautsou/nodejs2022q4-db`.
+
+#### Running docker-compose in `production` mode
+
+Change the `DOCKER_API_TARGET` variable in `.env` file to `api_production` and run:
+
+```bash
+docker-compose up --build
+```
+
+*Note:* It's not possible to run tests in `production` mode.
+
+
+#### Show docker images with their sizes
+
+```bash
+docker-compose images
+```
+
+*Note:* The requirement to have final image size less than 500MB is met by production image. 
+So use `production` mode to run the application (and make sure to clean up previous images before building).
+Also, it is possible to use remote images so just comment out `build` section in `docker-compose.yml` file.
+Tests don't work in `production` mode.
+
+
 
 
 ## Testing
 
-After application running by docker open new terminal and enter:
+After application running by docker in `development` mode open new terminal and enter:
 
 ```bash
 docker compose exec api npm run test
@@ -188,6 +231,8 @@ npm run docker:api:test
 
 ## Lint
 
+*Note:* Linting is configured to run in `development` mode only.
+
 ### Check
 
 ```
@@ -198,15 +243,3 @@ Or in docker container:
 ```
 npm run docker:api:lint
 ```
-
-### Format
-
-```
-npm run format
-```
-
-### Debugging in VSCode
-
-Press <kbd>F5</kbd> to debug.
-
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
