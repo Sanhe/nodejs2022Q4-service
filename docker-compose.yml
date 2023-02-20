@@ -8,6 +8,11 @@ services:
     image: shautsou/nodejs2022q4-db:latest
     container_name: db
     restart: always
+    command: [
+      "postgres",
+      "-p",
+      "${DATABASE_PORT}",
+    ]
     environment:
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
@@ -16,8 +21,8 @@ services:
     ports:
       - ${DATABASE_PORT}:${DATABASE_PORT}
     volumes:
-        - db-data:/var/lib/postgresql/data
-        - db-logs:/var/log/postgresql
+      - db-data:/var/lib/postgresql/data
+      - db-logs:/var/log/postgresql
     networks:
       - app-network
 
