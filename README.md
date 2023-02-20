@@ -89,6 +89,11 @@ docker-compose up --build
 docker-compose run api npx prisma migrate dev --name init
 ```
 
+Or just npm command:
+```bash
+npm run docker:api:migrate
+```
+
 #### Scan docker images for vulnerabilities
 Your system should be configured to run docker scan. For more information please visit
 https://docs.docker.com/engine/scan/.
