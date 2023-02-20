@@ -1,54 +1,69 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { DbService } from '../../db/db.service';
 import { generateUuid } from '../../common/uuid';
 import { TrackEntityInterface } from './interfaces/track.entity.interface';
 import { FavoritesService } from '../favorites/favorites.service';
 import { NotInFavoritesError } from '../favorites/errors/not-in-favorites.error';
+import { PrismaService } from '../../prisma.service';
+import { Track } from '@prisma/client';
 
 @Injectable()
 export class TracksService {
   constructor(
-    private readonly dbService: DbService,
-    @Inject(forwardRef(() => FavoritesService))
     private readonly favoritesService: FavoritesService,
+    private readonly prismaService: PrismaService,
   ) {}
 
-  async create(createTrackDto: CreateTrackDto): Promise<TrackEntityInterface> {
+  async create(createTrackDto: CreateTrackDto): Promise<Track> {
     const track = {
       id: generateUuid(),
       ...createTrackDto,
     };
 
-    await this.dbService.db.tracks.add(track);
+    await this.prismaService.track.create({
+      data: track,
+    });
 
     return track;
   }
 
-  async findAll(): Promise<TrackEntityInterface[]> {
-    const tracks = await this.dbService.db.tracks.findAll();
+  async findAll(): Promise<Track[]> {
+    const tracks = await this.prismaService.track.findMany();
 
     return tracks;
   }
 
-  async findOne(id: string): Promise<TrackEntityInterface | undefined> {
-    const track = await this.dbService.db.tracks.findById(id);
+  async findOne(id: string): Promise<Track | undefined> {
+    const track = await this.prismaService.track.findUnique({
+      where: {
+        id,
+      },
+    });
 
     return track;
   }
 
   async update(track: TrackEntityInterface, updateTrackDto: UpdateTrackDto) {
-    const updatedTrack = await this.dbService.db.tracks.update(track.id, {
-      ...track,
-      ...updateTrackDto,
+    const updatedTrack = await this.prismaService.track.update({
+      where: {
+        id: track.id,
+      },
+      data: {
+        ...track,
+        ...updateTrackDto,
+      },
     });
 
     return updatedTrack;
   }
 
-  async remove(track: TrackEntityInterface): Promise<void> {
-    await this.dbService.db.tracks.remove(track.id);
+  async remove(track: Track): Promise<void> {
+    await this.prismaService.track.delete({
+      where: {
+        id: track.id,
+      },
+    });
 
     try {
       await this.favoritesService.removeTrack(track.id);
@@ -59,5 +74,27 @@ export class TracksService {
         throw error;
       }
     }
+  }
+
+  async removeAlbumFromTracks(albumId: string): Promise<void> {
+    await this.prismaService.track.updateMany({
+      where: {
+        albumId,
+      },
+      data: {
+        albumId: null,
+      },
+    });
+  }
+
+  async removeArtistFromTracks(artistId: string): Promise<void> {
+    await this.prismaService.track.updateMany({
+      where: {
+        artistId,
+      },
+      data: {
+        artistId: null,
+      },
+    });
   }
 }

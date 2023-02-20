@@ -5,18 +5,23 @@ import { getCreateEntityVersion } from '../../common/version';
 import { CreateUserDtoInterface } from './interfaces/create-user.dto.interface';
 import { UpdatePasswordDtoInterface } from './interfaces/update-password.dto.interface';
 import { USER_VERSION_INCREMENT } from './users.config';
-import { DbService } from '../../db/db.service';
 import { InvalidPasswordError } from './errors/invalid-password.error';
 import { UserEntity } from './entities/user.entity';
+import { PrismaService } from '../../prisma.service';
+import { Prisma } from '@prisma/client';
+import { UsersPrismaFormatter } from './users.prisma.formatter';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly dbService: DbService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly usersPrismaFormater: UsersPrismaFormatter,
+  ) {}
 
   async create(createUserDto: CreateUserDtoInterface): Promise<UserEntity> {
     const currentTimestamp = getCurrentTimestamp();
 
-    const userData: UserEntity = {
+    const user: UserEntity = {
       id: generateUuid(),
       ...createUserDto,
       version: getCreateEntityVersion(),
@@ -24,23 +29,38 @@ export class UsersService {
       updatedAt: currentTimestamp,
     };
 
-    const user = new UserEntity();
+    const data: Prisma.UserCreateInput =
+      this.usersPrismaFormater.formatUserToPrismaUserCreateInput(user);
 
-    Object.assign(user, userData);
-
-    await this.dbService.db.users.add(user);
+    await this.prisma.user.create({
+      data,
+    });
 
     return user;
   }
 
   async findAll(): Promise<UserEntity[]> {
-    const users = await this.dbService.db.users.findAll();
+    const prismaUsers = await this.prisma.user.findMany();
+
+    const users: UserEntity[] =
+      this.usersPrismaFormater.formatPrismaUsersToUsers(prismaUsers);
 
     return users;
   }
 
   async findOne(id: string): Promise<UserEntity | undefined> {
-    const user = await this.dbService.db.users.findById(id);
+    const prismaUser = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!prismaUser) {
+      return undefined;
+    }
+
+    const user: UserEntity =
+      this.usersPrismaFormater.formatPrismaUserToUser(prismaUser);
 
     return user;
   }
@@ -57,12 +77,24 @@ export class UsersService {
     user.version += USER_VERSION_INCREMENT;
     user.updatedAt = getCurrentTimestamp();
 
-    const updatedUser = await this.dbService.db.users.update(user.id, user);
+    const data: Prisma.UserUpdateInput =
+      this.usersPrismaFormater.formatUserToPrismaUserUpdateInput(user);
 
-    return updatedUser;
+    await this.prisma.user.update({
+      data,
+      where: {
+        id: user.id,
+      },
+    });
+
+    return user;
   }
 
   async remove(user: UserEntity): Promise<void> {
-    await this.dbService.db.users.remove(user.id);
+    await this.prisma.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   }
 }

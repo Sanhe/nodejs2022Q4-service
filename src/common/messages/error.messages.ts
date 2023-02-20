@@ -7,6 +7,7 @@ const errorMessages = {
   USER_NOT_FOUND: 'User not found',
   INVALID_PASSWORD: 'Old password is invalid',
   NOT_IN_FAVORITES: 'Item is not in favorites',
+  ALREADY_IN_FAVORITES: 'Item is already in favorites',
 };
 
 export { errorMessages };

@@ -1,6 +1,6 @@
 {
   "name": "home-library",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "author": "",
   "private": true,
@@ -18,7 +18,12 @@
     "test:auth": "cross-env TEST_MODE=auth jest --config ./test/jest-e2e.json",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "docker:scan:api": "docker scan api",
+    "docker:scan:db": "docker scan db",
+    "docker:api:migrate": "docker-compose exec api npx prisma migrate dev --name init",
+    "docker:api:test": "docker-compose exec api npm run test",
+    "docker:api:lint": "docker-compose exec api npm run lint"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -28,6 +33,7 @@
     "@nestjs/mapped-types": "^1.0.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.2.1",
+    "@prisma/client": "^4.10.1",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
@@ -59,6 +65,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.2.5",
     "prettier": "^2.3.2",
+    "prisma": "^4.10.1",
     "source-map-support": "^0.5.20",
     "supertest": "^6.2.3",
     "ts-jest": "^27.0.3",

@@ -1,18 +1,16 @@
-import { ArtistEntityInterface } from '../../artists/interfaces/artist.entity.interface';
-import { AlbumEntityInterface } from '../../albums/interfaces/album.entity.interface';
-import { TrackEntityInterface } from '../../tracks/interfaces/track.entity.interface';
+import { Album, Artist, Track } from '@prisma/client';
 
 export class OutputFavoritesDto {
-  artists: ArtistEntityInterface[];
+  artists: Artist[];
 
-  albums: AlbumEntityInterface[];
+  albums: Album[];
 
-  tracks: TrackEntityInterface[];
+  tracks: Track[];
 
   constructor(
-    artists: ArtistEntityInterface[] = [],
-    albums: AlbumEntityInterface[] = [],
-    tracks: TrackEntityInterface[] = [],
+    artists: Artist[] = [],
+    albums: Album[] = [],
+    tracks: Track[] = [],
   ) {
     this.artists = artists;
     this.albums = albums;
