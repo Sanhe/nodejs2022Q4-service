@@ -86,11 +86,6 @@ docker-compose up --build
 #### Run prisma migrations
 
 ```bash
-docker-compose run api npx prisma migrate dev --name init
-```
-
-Or just npm command:
-```bash
 npm run docker:api:migrate
 ```
 
