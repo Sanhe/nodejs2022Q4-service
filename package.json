@@ -23,6 +23,7 @@
     "docker:scan:db": "docker scan db",
     "docker:api:migrate": "docker-compose exec api npx prisma migrate dev --name init",
     "docker:api:test": "docker-compose exec api npm run test",
+    "docker:api:test:auth": "docker-compose exec api npm run test:auth",
     "docker:api:lint": "docker-compose exec api npm run lint"
   },
   "dependencies": {

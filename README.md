@@ -24,10 +24,10 @@ git clone git@github.com:Sanhe/nodejs2022Q4-service.git
 cd nodejs2022Q4-service
 ```
 
-### Switch to the appropriate branch `feature/containerization-database-orm`
+### Switch to the appropriate branch `feature/logging-and-auth`
 
 ```
-git checkout feature/containerization-database-orm
+git checkout feature/logging-and-auth
 ```
 
 ### Copy `.env.example` to `.env` and update it if needed
@@ -229,7 +229,16 @@ Or you can use npm command:
 npm run docker:api:test
 ```
 
-## Lint
+To run all test with authorization
+
+```bash
+docker-compose exec api npm run test:auth
+```
+
+Or you can use npm command:
+```bash
+npm run docker:api:test:auth
+```
 
 *Note:* Linting is configured to run in `development` mode only.
 
