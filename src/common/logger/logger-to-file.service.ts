@@ -7,7 +7,7 @@ import * as process from 'process';
 @Injectable()
 export class LoggerToFileService {
   private async saveLog(message: string, type: string) {
-    const defaultLogPath = 'logs/';
+    const defaultLogPath = './logs';
     const datetime = new Date().toISOString();
     const logMessage = `${datetime} ${message}`;
     const logMessageWithNewLine = `${logMessage}\r`;
@@ -26,8 +26,6 @@ export class LoggerToFileService {
       .slice()
       .reverse()
       .find((file) => {
-        // console.log(`file: ${file} type: ${type}`);
-
         const fileType = file.split('-')[0];
 
         return fileType.includes(type);

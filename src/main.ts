@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { LogLevel, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CONFIG_LOG_LEVELS_KEY, CONFIG_PORT_KEY } from './config/defaults';
+import { CONFIG_PORT_KEY } from './config/defaults';
 import { useContainer } from 'class-validator';
 import { SwaggerModule } from '@nestjs/swagger';
 import { getOpenApiConfig } from './config/open-api.config';
@@ -14,11 +14,7 @@ async function bootstrap() {
   });
   const configService = app.get(ConfigService);
 
-  const logLevels = configService.get(CONFIG_LOG_LEVELS_KEY);
-  const logger = new CustomLoggerService('Main', {
-    logLevels: logLevels as LogLevel[],
-  });
-  logger.setLogLevels(logLevels as LogLevel[]);
+  const logger = new CustomLoggerService('Main', {});
 
   process.on('uncaughtException', (error) => {
     logger.error('[Uncaught Exception]', error);
