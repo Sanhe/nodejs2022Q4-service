@@ -11,7 +11,6 @@ import { PrismaService } from '../../common/prisma.service';
 import { Prisma } from '@prisma/client';
 import { UsersPrismaFormatter } from './users.prisma.formatter';
 import { CustomLoggerService } from '../../common/logger/logger.service';
-import { UserNotFoundException } from './errors/user-not-found.error';
 
 @Injectable()
 export class UsersService {

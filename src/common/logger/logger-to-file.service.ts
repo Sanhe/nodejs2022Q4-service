@@ -1,4 +1,4 @@
-import { readdir, appendFile, stat, access, mkdir } from 'node:fs/promises';
+import { readdir, appendFile, stat, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
 import { Injectable } from '@nestjs/common';
@@ -59,23 +59,23 @@ export class LoggerToFileService {
     }
   }
 
-  async log(message: string, ...optionalParams: any[]) {
+  async log(message: string) {
     await this.saveLog(message, 'log');
   }
 
-  async error(message: string, ...optionalParams: any[]) {
+  async error(message: string) {
     await this.saveLog(message, 'error');
   }
 
-  async warn(message: string, ...optionalParams: any[]) {
+  async warn(message: string) {
     await this.saveLog(message, 'warn');
   }
 
-  async debug(message: string, ...optionalParams: any[]) {
+  async debug(message: string) {
     await this.saveLog(message, 'debug');
   }
 
-  async verbose(message: string, ...optionalParams: any[]) {
+  async verbose(message: string) {
     await this.saveLog(message, 'verbose');
   }
 }

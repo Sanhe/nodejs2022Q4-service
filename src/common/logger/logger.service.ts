@@ -39,7 +39,7 @@ export class CustomLoggerService extends ConsoleLogger {
 
     super.log(message, ...optionalParams);
 
-    await this.fileLogger.log(message, ...optionalParams);
+    await this.fileLogger.log(message);
   }
 
   async error(message: any, ...optionalParams: any[]) {
@@ -51,7 +51,7 @@ export class CustomLoggerService extends ConsoleLogger {
 
     super.error(message, ...optionalParams);
 
-    await this.fileLogger.error(message, ...optionalParams);
+    await this.fileLogger.error(message);
   }
 
   async warn(message: any, ...optionalParams: any[]) {
@@ -61,9 +61,9 @@ export class CustomLoggerService extends ConsoleLogger {
 
     message = `[CustomLogger] ${message}`;
 
-    super.warn(message);
+    super.warn(message, ...optionalParams);
 
-    await this.fileLogger.warn(message, ...optionalParams);
+    await this.fileLogger.warn(message);
   }
 
   async debug(message: any, ...optionalParams: any[]) {
@@ -73,9 +73,9 @@ export class CustomLoggerService extends ConsoleLogger {
 
     message = `[CustomLogger] ${message}`;
 
-    await super.debug(message);
+    await super.debug(message, ...optionalParams);
 
-    this.fileLogger.debug(message, ...optionalParams);
+    this.fileLogger.debug(message);
   }
 
   async verbose(message: any, ...optionalParams: any[]) {
@@ -85,8 +85,8 @@ export class CustomLoggerService extends ConsoleLogger {
 
     message = `[CustomLogger] ${message}`;
 
-    super.log(message);
+    super.log(message, ...optionalParams);
 
-    await this.fileLogger.verbose(message, ...optionalParams);
+    await this.fileLogger.verbose(message);
   }
 }
