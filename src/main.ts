@@ -1,15 +1,26 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { LogLevel, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CONFIG_PORT_KEY } from './config/defaults';
+import { CONFIG_LOG_LEVELS_KEY, CONFIG_PORT_KEY } from './config/defaults';
 import { useContainer } from 'class-validator';
 import { SwaggerModule } from '@nestjs/swagger';
 import { getOpenApiConfig } from './config/open-api.config';
+import { CustomLoggerService } from './common/logger/logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
   const configService = app.get(ConfigService);
+
+  const logLevels = configService.get(CONFIG_LOG_LEVELS_KEY);
+  const logger = new CustomLoggerService('Main', {
+    logLevels: logLevels as LogLevel[],
+  });
+  logger.setLogLevels(logLevels as LogLevel[]);
+  app.useLogger(logger);
+
   const apiPort = configService.get(CONFIG_PORT_KEY);
 
   app.useGlobalPipes(

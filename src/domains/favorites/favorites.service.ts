@@ -2,13 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { OutputFavoritesDto } from './dto/output-favorites.dto';
 import { generateUuid } from '../../common/uuid';
 import { NotInFavoritesError } from './errors/not-in-favorites.error';
-import { PrismaService } from '../../prisma.service';
+import { PrismaService } from '../../common/prisma.service';
 import { Favorite } from '@prisma/client';
 import { AlreadyInFavoritesError } from './errors/already-in-favorites.error';
+import { CustomLoggerService } from '../../common/logger/logger.service';
 
 @Injectable()
 export class FavoritesService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly logger: CustomLoggerService,
+  ) {
+    this.logger.setContext(FavoritesService.name);
+  }
 
   async findAll(): Promise<any> {
     const favorites = await this.prismaService.favorite.findMany({

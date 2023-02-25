@@ -7,7 +7,8 @@ import { ArtistsService } from '../artists/artists.service';
 import { AlbumsService } from '../albums/albums.service';
 import { ArtistsModule } from '../artists/artists.module';
 import { AlbumsModule } from '../albums/albums.module';
-import { PrismaService } from '../../prisma.service';
+import { PrismaService } from '../../common/prisma.service';
+import { CustomLoggerService } from '../../common/logger/logger.service';
 
 @Module({
   controllers: [FavoritesController],
@@ -17,6 +18,7 @@ import { PrismaService } from '../../prisma.service';
     forwardRef(() => AlbumsModule),
   ],
   providers: [
+    CustomLoggerService,
     FavoritesService,
     TracksService,
     ArtistsService,

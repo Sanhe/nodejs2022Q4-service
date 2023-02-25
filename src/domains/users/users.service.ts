@@ -7,19 +7,25 @@ import { UpdatePasswordDtoInterface } from './interfaces/update-password.dto.int
 import { USER_VERSION_INCREMENT } from './users.config';
 import { InvalidPasswordError } from './errors/invalid-password.error';
 import { UserEntity } from './entities/user.entity';
-import { PrismaService } from '../../prisma.service';
+import { PrismaService } from '../../common/prisma.service';
 import { Prisma } from '@prisma/client';
 import { UsersPrismaFormatter } from './users.prisma.formatter';
+import { CustomLoggerService } from '../../common/logger/logger.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly usersPrismaFormater: UsersPrismaFormatter,
-  ) {}
+    private readonly logger: CustomLoggerService,
+  ) {
+    this.logger.setContext(UsersService.name);
+  }
 
   async create(createUserDto: CreateUserDtoInterface): Promise<UserEntity> {
     const currentTimestamp = getCurrentTimestamp();
+
+    this.logger.log('Create user');
 
     const user: UserEntity = {
       id: generateUuid(),
@@ -42,6 +48,9 @@ export class UsersService {
   async findAll(): Promise<UserEntity[]> {
     const prismaUsers = await this.prisma.user.findMany();
 
+    this.logger.log('Find all users');
+    this.logger.error('Test error');
+    throw new Error('test');
     const users: UserEntity[] =
       this.usersPrismaFormater.formatPrismaUsersToUsers(prismaUsers);
 

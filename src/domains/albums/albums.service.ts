@@ -4,9 +4,10 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { generateUuid } from '../../common/uuid';
 import { FavoritesService } from '../favorites/favorites.service';
 import { NotInFavoritesError } from '../favorites/errors/not-in-favorites.error';
-import { PrismaService } from '../../prisma.service';
+import { PrismaService } from '../../common/prisma.service';
 import { Album } from '@prisma/client';
 import { TracksService } from '../tracks/tracks.service';
+import { CustomLoggerService } from '../../common/logger/logger.service';
 
 @Injectable()
 export class AlbumsService {
@@ -14,7 +15,10 @@ export class AlbumsService {
     private readonly favoritesService: FavoritesService,
     private readonly prismaService: PrismaService,
     private readonly tracksService: TracksService,
-  ) {}
+    private readonly logger: CustomLoggerService,
+  ) {
+    this.logger.setContext(AlbumsService.name);
+  }
 
   async create(createAlbumDto: CreateAlbumDto): Promise<Album> {
     const album = {
