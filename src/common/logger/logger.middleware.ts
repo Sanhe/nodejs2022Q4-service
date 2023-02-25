@@ -1,20 +1,33 @@
+import { constants as httpStatus } from 'http2';
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { CustomLoggerService } from './logger.service';
+import { Request, Response } from 'express';
+import { finished } from 'stream';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  private logger = new CustomLoggerService('HTTP', {});
+  constructor(private readonly logger: CustomLoggerService) {}
 
   use(request: Request, response: Response, next: any): void {
-    // const { ip, method, path: url } = request;
+    const { method, originalUrl, query, body } = request;
+    const message = `[Request] ${method} ${originalUrl} ${JSON.stringify(
+      query,
+    )} ${JSON.stringify(body)}`;
 
-    // response.on('finish', () => {
-    //   const { statusCode } = response;
-    //   const contentLength = response.get('content-length');
-    //   this.logger.log(`${statusCode} ${contentLength} - ${request.method} ${request.originalUrl}`);
-    // }
+    this.logger.log(message);
 
-    this.logger.log(`[Middleware] test`);
+    finished(response, () => {
+      const { statusCode, statusMessage } = response;
+      const responseMessage = `[Response] ${statusCode} ${statusMessage}`;
+
+      if (statusCode >= httpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR) {
+        this.logger.error(responseMessage);
+      } else if (statusCode >= httpStatus.HTTP_STATUS_BAD_REQUEST) {
+        this.logger.warn(responseMessage);
+      } else {
+        this.logger.log(responseMessage);
+      }
+    });
 
     next();
   }

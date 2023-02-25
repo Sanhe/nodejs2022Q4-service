@@ -15,11 +15,7 @@ export class CustomLoggerService extends ConsoleLogger {
   }
 
   log(message: any, ...optionalParams: any[]) {
-    message = `[CustomLogger] [${this.isLevelEnabled('log')}] ${message}`;
-
-    if (!this.isLevelEnabled('log')) {
-      return;
-    }
+    message = `[CustomLogger] ${message}`;
 
     super.log(message, ...optionalParams);
   }

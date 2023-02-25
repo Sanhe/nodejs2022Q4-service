@@ -1,3 +1,4 @@
+import { constants as httpStatus } from 'http2';
 import {
   Controller,
   Get,
@@ -12,7 +13,6 @@ import {
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { constants as httpStatus } from 'http2';
 import { errorMessages } from '../../common/messages/error.messages';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { parseUUIDPipe } from '../../common/pipes/parse-uuid.pipe';

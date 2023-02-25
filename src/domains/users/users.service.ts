@@ -49,8 +49,11 @@ export class UsersService {
     const prismaUsers = await this.prisma.user.findMany();
 
     this.logger.log('Find all users');
+
+    // TODO: Remove this test code
     this.logger.error('Test error');
     throw new Error('test');
+
     const users: UserEntity[] =
       this.usersPrismaFormater.formatPrismaUsersToUsers(prismaUsers);
 

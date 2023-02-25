@@ -29,9 +29,8 @@ import configuration from './config/configuration';
   providers: [AppService, PrismaService],
   exports: [AppService, PrismaService],
 })
-// implements NestModule
-export class AppModule {
-  // configure(consumer: MiddlewareConsumer): void {
-  //   consumer.apply(LoggerMiddleware).forRoutes('*');
-  // }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
 }
