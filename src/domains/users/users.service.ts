@@ -11,6 +11,7 @@ import { PrismaService } from '../../common/prisma.service';
 import { Prisma } from '@prisma/client';
 import { UsersPrismaFormatter } from './users.prisma.formatter';
 import { CustomLoggerService } from '../../common/logger/logger.service';
+import { UserNotFoundException } from './errors/user-not-found.error';
 
 @Injectable()
 export class UsersService {
@@ -47,12 +48,6 @@ export class UsersService {
 
   async findAll(): Promise<UserEntity[]> {
     const prismaUsers = await this.prisma.user.findMany();
-
-    this.logger.log('Find all users');
-
-    // TODO: Remove this test code
-    this.logger.error('Test error');
-    throw new Error('test');
 
     const users: UserEntity[] =
       this.usersPrismaFormater.formatPrismaUsersToUsers(prismaUsers);

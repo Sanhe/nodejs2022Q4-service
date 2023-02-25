@@ -11,6 +11,9 @@ import { LoggerModule } from './common/logger/logger.module';
 import { LoggerMiddleware } from './common/logger/logger.middleware';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
+import { AppController } from './app.controller';
+import { APP_FILTER } from '@nestjs/core';
+import { CustomExceptionFilter } from './exception.filter';
 
 @Module({
   imports: [
@@ -26,7 +29,15 @@ import configuration from './config/configuration';
     TracksModule,
     FavoritesModule,
   ],
-  providers: [AppService, PrismaService],
+  controllers: [AppController],
+  providers: [
+    AppService,
+    PrismaService,
+    {
+      provide: APP_FILTER,
+      useClass: CustomExceptionFilter,
+    },
+  ],
   exports: [AppService, PrismaService],
 })
 export class AppModule implements NestModule {
