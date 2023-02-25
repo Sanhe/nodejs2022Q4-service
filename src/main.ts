@@ -19,6 +19,15 @@ async function bootstrap() {
     logLevels: logLevels as LogLevel[],
   });
   logger.setLogLevels(logLevels as LogLevel[]);
+
+  process.on('uncaughtException', (error) => {
+    logger.error('[Uncaught Exception]', error);
+  });
+
+  process.on('unhandledRejection', (error) => {
+    logger.error('[Unhandled Rejection]', error);
+  });
+
   app.useLogger(logger);
 
   const apiPort = configService.get(CONFIG_PORT_KEY);

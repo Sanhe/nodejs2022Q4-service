@@ -1,14 +1,14 @@
 import { constants as httpStatus } from 'http2';
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { CustomLoggerService } from './logger.service';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { finished } from 'stream';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
   constructor(private readonly logger: CustomLoggerService) {}
 
-  use(request: Request, response: Response, next: any): void {
+  use(request: Request, response: Response, next: NextFunction): void {
     const { method, originalUrl, query, body } = request;
     const message = `[Request] ${method} ${originalUrl} ${JSON.stringify(
       query,

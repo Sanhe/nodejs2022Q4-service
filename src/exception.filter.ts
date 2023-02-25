@@ -22,7 +22,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
         : httpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR;
     const message = `${status} Unexpected error: ${exception}`;
 
-    this.logger.error(`[Exception Filter]: ${message}`);
+    this.logger.error(`[Exception Filter] ${message}`);
 
     response.status(status).json({
       statusCode: status,

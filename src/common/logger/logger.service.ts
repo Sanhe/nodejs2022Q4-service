@@ -1,47 +1,65 @@
 import { ConsoleLogger, Injectable, LogLevel, Scope } from '@nestjs/common';
 import { ConsoleLoggerOptions } from '@nestjs/common/services/console-logger.service';
+import { LoggerToFileService } from './logger-to-file.service';
+
+const requiredLogLevels: LogLevel[] = [];
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class CustomLoggerService extends ConsoleLogger {
+  private readonly fileLogger: LoggerToFileService;
+
   constructor(context: string, options: ConsoleLoggerOptions) {
+    const logLevels = process.env.LOG_LEVELS?.split(',') || [];
     const defaultOptions = {
-      logLevels: process.env.LOG_LEVELS?.split(',') || [],
+      logLevels: [...logLevels, ...requiredLogLevels],
     };
 
     super(context, {
       ...defaultOptions,
       ...options,
     } as ConsoleLoggerOptions);
+
+    this.fileLogger = new LoggerToFileService();
   }
 
-  log(message: any, ...optionalParams: any[]) {
+  async log(message: any, ...optionalParams: any[]) {
     message = `[CustomLogger] ${message}`;
 
     super.log(message, ...optionalParams);
+
+    await this.fileLogger.log(message, ...optionalParams);
   }
 
-  error(message: any, ...optionalParams: any[]) {
+  async error(message: any, ...optionalParams: any[]) {
     message = `[CustomLogger] ${message}`;
 
     super.error(message, ...optionalParams);
+
+    await this.fileLogger.error(message, ...optionalParams);
   }
 
-  warn(message: any, ...optionalParams: any[]) {
+  async warn(message: any, ...optionalParams: any[]) {
     message = `[CustomLogger] ${message}`;
 
     super.warn(message);
+
+    await this.fileLogger.warn(message, ...optionalParams);
   }
 
-  debug(message: any, ...optionalParams: any[]) {
+  async debug(message: any, ...optionalParams: any[]) {
     message = `[CustomLogger] ${message}`;
 
-    super.debug(message);
+    await super.debug(message);
+
+    this.fileLogger.debug(message, ...optionalParams);
   }
 
-  verbose(message: any, ...optionalParams: any[]) {
+  async verbose(message: any, ...optionalParams: any[]) {
     message = `[CustomLogger] ${message}`;
 
     super.log(message);
+
+    await this.fileLogger.verbose(message, ...optionalParams);
   }
 
   setLogLevels(levels: LogLevel[]) {
