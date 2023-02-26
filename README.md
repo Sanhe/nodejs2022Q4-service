@@ -256,10 +256,16 @@ npm run docker:api:lint
 
 ## Logging
 
-* LOG_MAX_FILE_SIZE - max size of log file in bytes, but some files can be bigger than this value because of the log 
+* LOG_MAX_FILE_SIZE - max size of log file in kBs, but some files can be bigger than this value because of the log 
 rotation (the last input data can increase the max size of the file)
 * LOG_LEVEL - log level number
 * LOG_PATH - path to log files
 
 *Note:* Response body is logged only in DEBUG mode.
 
+## OpenAPI/Swagger
+
+After starting the app on port (4000 as default and can be changed in `.env` file on `PORT` variable) you can open
+documentation by typing http://localhost:4000/doc/.
+For more information about OpenAPI/Swagger please visit https://swagger.io/.
+Please, use Bear token for authorization.

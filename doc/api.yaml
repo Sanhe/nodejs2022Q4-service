@@ -31,10 +31,6 @@ components:
       required:
         - id
         - login
-        - password
-        - version
-        - createdAt
-        - updatedAt
     Artist:
       type: object
       properties:
@@ -50,7 +46,6 @@ components:
       required:
         - id
         - name
-        - grammy
     Album:
       type: object
       properties:
@@ -70,7 +65,6 @@ components:
       required:
         - id
         - name
-        - year
     Track:
       type: object
       properties:

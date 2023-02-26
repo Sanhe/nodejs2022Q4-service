@@ -8,7 +8,7 @@ const getOpenApiConfig = async (): Promise<OpenAPIObject> => {
   let docConfig = null;
 
   try {
-    const apiYamlPath = join(__dirname, '..', '..', 'doc', 'api1.yaml');
+    const apiYamlPath = join(__dirname, '..', '..', 'doc', 'api.yaml');
 
     const apiYaml = await readFile(apiYamlPath, 'utf8');
     docConfig = jsyaml.load(apiYaml) as OpenAPIObject;
