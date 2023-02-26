@@ -22,7 +22,7 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     const user = await this.userService.findOne(userId);
 
     if (!user) {
-      throw new Error('Token is invalid!');
+      throw new Error('Refresh token is invalid!');
     }
 
     return user;

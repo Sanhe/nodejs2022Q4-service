@@ -24,7 +24,9 @@ export class RefreshAuthGuard extends AuthGuard('refresh') {
 
   handleRequest(err, user) {
     if (err || !user) {
-      throw err || new ForbiddenException('Refresh token is invalid.');
+      throw (
+        err || new ForbiddenException('Refresh token is invalid or expired.')
+      );
     }
 
     return user;
