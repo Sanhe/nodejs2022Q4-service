@@ -14,4 +14,8 @@ export default () => ({
     DEFAULT_API_PORT,
   useInitialData: process.env[ENV_USE_INITIAL_DATA] === 'true',
   logLevel: +process.env[ENV_LOG_LEVEL_KEY] || DEFAULT_LOG_LEVEL,
+  JWT_SECRET_KEY: process.env.JWT_SECRET_KEY ?? 'secret123123',
+  JWT_SECRET_REFRESH_KEY: process.env.JWT_SECRET_REFRESH_KEY ?? 'secret123123',
+  TOKEN_EXPIRE_TIME: process.env.TOKEN_EXPIRE_TIME ?? '1h',
+  TOKEN_REFRESH_EXPIRE_TIME: process.env.TOKEN_REFRESH_EXPIRE_TIME ?? '1d',
 });
