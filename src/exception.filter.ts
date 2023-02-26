@@ -24,11 +24,15 @@ export class CustomExceptionFilter implements ExceptionFilter {
 
     this.logger.error(`[Exception Filter] ${message}`);
 
-    response.status(status).json({
+    const $responseBody = {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
       message,
-    });
+    };
+
+    this.logger.debug(`[Response Body] ${JSON.stringify($responseBody)}\n`);
+
+    response.status(status).json($responseBody);
   }
 }

@@ -252,3 +252,14 @@ Or in docker container:
 ```
 npm run docker:api:lint
 ```
+
+
+## Logging
+
+* LOG_MAX_FILE_SIZE - max size of log file in bytes, but some files can be bigger than this value because of the log 
+rotation (the last input data can increase the max size of the file)
+* LOG_LEVEL - log level number
+* LOG_PATH - path to log files
+
+*Note:* Response body is logged only in DEBUG mode.
+

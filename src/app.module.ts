@@ -12,8 +12,9 @@ import { LoggerMiddleware } from './common/logger/logger.middleware';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
 import { AppController } from './app.controller';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { CustomExceptionFilter } from './exception.filter';
+import { HttpInterceptor } from './http.interceptor';
 
 @Module({
   imports: [
@@ -36,6 +37,10 @@ import { CustomExceptionFilter } from './exception.filter';
     {
       provide: APP_FILTER,
       useClass: CustomExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpInterceptor,
     },
   ],
   exports: [AppService, PrismaService],
