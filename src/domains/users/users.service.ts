@@ -11,6 +11,7 @@ import { PrismaService } from '../../common/prisma.service';
 import { Prisma } from '@prisma/client';
 import { UsersPrismaFormatter } from './users.prisma.formatter';
 import { CustomLoggerService } from '../../common/logger/logger.service';
+import { getHash, isPlainEqualHash } from '../../common/hasher';
 
 @Injectable()
 export class UsersService {
@@ -24,12 +25,12 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDtoInterface): Promise<UserEntity> {
     const currentTimestamp = getCurrentTimestamp();
-
-    this.logger.log('Create user');
+    const hashedPassword = await getHash(createUserDto.password);
 
     const user: UserEntity = {
       id: generateUuid(),
       ...createUserDto,
+      password: hashedPassword,
       version: getCreateEntityVersion(),
       createdAt: currentTimestamp,
       updatedAt: currentTimestamp,
@@ -75,11 +76,16 @@ export class UsersService {
     user: UserEntity,
     updatePasswordDto: UpdatePasswordDtoInterface,
   ): Promise<UserEntity> {
-    if (user.password !== updatePasswordDto.oldPassword) {
+    const isPasswordValid = await isPlainEqualHash(
+      updatePasswordDto.oldPassword,
+      user.password,
+    );
+
+    if (!isPasswordValid) {
       throw new InvalidPasswordError();
     }
 
-    user.password = updatePasswordDto.newPassword;
+    user.password = await getHash(updatePasswordDto.newPassword);
     user.version += USER_VERSION_INCREMENT;
     user.updatedAt = getCurrentTimestamp();
 

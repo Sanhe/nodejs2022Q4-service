@@ -5,7 +5,6 @@ services:
     build:
       context: ./database
       dockerfile: ./Dockerfile
-    image: shautsou/nodejs2022q4-db:latest
     container_name: db
     restart: always
     command: [
@@ -31,7 +30,6 @@ services:
       context: ./
       dockerfile: ./Dockerfile
       target: ${DOCKER_API_TARGET}
-    image: shautsou/nodejs2022q4-api:latest
     container_name: api
     restart: on-failure
     environment:
