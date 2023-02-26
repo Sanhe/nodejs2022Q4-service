@@ -11,12 +11,14 @@ import {
 import { CreateUserDto } from '../domains/users/dtos/create-user.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local.auth.guard';
+import { Public } from './decorators/public.decorator';
 
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) {
     const user = await this.authService.signup(createUserDto);
@@ -27,6 +29,7 @@ export class AuthController {
     };
   }
 
+  @Public()
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @HttpCode(httpStatus.HTTP_STATUS_OK)

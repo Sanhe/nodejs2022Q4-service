@@ -39,7 +39,6 @@ export class UsersController {
     return formattedUser;
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   @ApiOperation({ summary: 'Get all users' })
   async findAll() {

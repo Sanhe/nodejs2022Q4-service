@@ -5,6 +5,10 @@ import { CustomLoggerService } from './common/logger/logger.service';
 export class AppService {
   constructor(private readonly logger: CustomLoggerService) {}
 
+  getHello(): string {
+    return 'Hello World!';
+  }
+
   getLogTest(): string {
     this.logger.log('test log');
     this.logger.error('error log');
