@@ -7,11 +7,13 @@ import {
   Post,
   UseGuards,
   UseInterceptors,
+  Request,
 } from '@nestjs/common';
 import { CreateUserDto } from '../domains/users/dtos/create-user.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local.auth.guard';
 import { Public } from './decorators/public.decorator';
+import { RefreshAuthGuard } from './guards/refresh.auth.guard';
 
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -33,9 +35,19 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @HttpCode(httpStatus.HTTP_STATUS_OK)
-  async login(@Body() createUserDto: CreateUserDto) {
-    const user = await this.authService.login(createUserDto);
+  async login(@Request() request: any) {
+    const jwtTokens = await this.authService.login(request.user);
 
-    return user;
+    return jwtTokens;
+  }
+
+  @Public()
+  @Post('refresh')
+  @UseGuards(RefreshAuthGuard)
+  @HttpCode(httpStatus.HTTP_STATUS_OK)
+  async refresh(@Request() request: any) {
+    const jwtTokens = await this.authService.refresh(request.user);
+
+    return jwtTokens;
   }
 }
