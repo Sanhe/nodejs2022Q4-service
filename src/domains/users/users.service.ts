@@ -72,6 +72,23 @@ export class UsersService {
     return user;
   }
 
+  async findOneByLogin(login: string): Promise<UserEntity | undefined> {
+    const prismaUser = await this.prisma.user.findUnique({
+      where: {
+        login,
+      },
+    });
+
+    if (!prismaUser) {
+      return undefined;
+    }
+
+    const user: UserEntity =
+      this.usersPrismaFormater.formatPrismaUserToUser(prismaUser);
+
+    return user;
+  }
+
   async updatePassword(
     user: UserEntity,
     updatePasswordDto: UpdatePasswordDtoInterface,

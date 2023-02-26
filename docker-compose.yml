@@ -21,7 +21,6 @@ services:
       - ${DATABASE_PORT}:${DATABASE_PORT}
     volumes:
       - db-data:/var/lib/postgresql/data
-      - db-logs:/var/log/postgresql
     networks:
       - app-network
 
@@ -47,7 +46,6 @@ services:
 
 volumes:
   db-data:
-  db-logs:
   api-node-modules:
 
 networks:

@@ -15,5 +15,6 @@ import { CustomLoggerService } from '../../common/logger/logger.service';
     PrismaService,
     UsersPrismaFormatter,
   ],
+  exports: [UsersService],
 })
 export class UsersModule {}

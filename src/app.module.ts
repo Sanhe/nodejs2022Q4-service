@@ -15,6 +15,7 @@ import { AppController } from './app.controller';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { CustomExceptionFilter } from './exception.filter';
 import { HttpInterceptor } from './http.interceptor';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { HttpInterceptor } from './http.interceptor';
     ArtistsModule,
     TracksModule,
     FavoritesModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
