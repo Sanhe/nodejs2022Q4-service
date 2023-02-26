@@ -20,7 +20,10 @@ export class CustomExceptionFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.getStatus()
         : httpStatus.HTTP_STATUS_INTERNAL_SERVER_ERROR;
-    const message = `${status} Unexpected error: ${exception}`;
+    const message =
+      exception instanceof HttpException
+        ? `${exception.message}`
+        : `Unexpected: ${exception}`;
 
     this.logger.error(`[Exception Filter] ${message}`);
 

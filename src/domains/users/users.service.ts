@@ -93,9 +93,9 @@ export class UsersService {
     user: UserEntity,
     updatePasswordDto: UpdatePasswordDtoInterface,
   ): Promise<UserEntity> {
-    const isPasswordValid = await isPlainEqualHash(
+    const isPasswordValid = await this.validatePassword(
+      user,
       updatePasswordDto.oldPassword,
-      user.password,
     );
 
     if (!isPasswordValid) {
@@ -125,5 +125,25 @@ export class UsersService {
         id: user.id,
       },
     });
+  }
+
+  async validatePassword(user: UserEntity, password: string): Promise<boolean> {
+    return isPlainEqualHash(password, user.password);
+  }
+
+  async validateUser(login: string, password: string): Promise<any> {
+    const user = await this.findOneByLogin(login);
+
+    if (!user) {
+      return null;
+    }
+
+    const isPasswordValid = await this.validatePassword(user, password);
+
+    if (!isPasswordValid) {
+      return null;
+    }
+
+    return user;
   }
 }

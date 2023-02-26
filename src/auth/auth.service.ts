@@ -23,4 +23,24 @@ export class AuthService {
 
     return user;
   }
+
+  async login(createUserDto: CreateUserDto) {
+    const user = await this.validateUser(
+      createUserDto.login,
+      createUserDto.password,
+    );
+
+    if (!user) {
+      throw new HttpException(
+        'Invalid credentials',
+        httpStatus.HTTP_STATUS_BAD_REQUEST,
+      );
+    }
+
+    return user;
+  }
+
+  async validateUser(username: string, password: string): Promise<any> {
+    return await this.usersService.validateUser(username, password);
+  }
 }
