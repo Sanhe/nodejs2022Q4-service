@@ -27,12 +27,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/user",
+							"raw": "{{URL}}/user?a=2",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"user"
+							],
+							"query": [
+								{
+									"key": "a",
+									"value": "2"
+								}
 							]
 						}
 					},
@@ -81,7 +87,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"oldPassword\": \"user1\",\n    \"newPassword\": \"newone\"\n}",
+							"raw": "{\n    \"oldPassword\": \"newone\",\n    \"newPassword\": \"newone0\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -114,7 +120,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"login\": \"aaa\",\n    \"password\": \"111111\"\n}",
+							"raw": "{\n    \"login\": \"Test User 2\",\n    \"password\": \"1111112\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -194,6 +200,16 @@
 				{
 					"name": "Get track",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_BEARER}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -222,7 +238,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"New track\",\n    \"artistId\": null,\n    \"albumId\": \"64f16f3f-4923-42b7-8749-e0991b342dad\",\n    \"duration\": 123\n}",
+							"raw": "{\n    \"name\": \"New track 3\",\n    \"duration\": 123\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -248,7 +264,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Updated KC track\",\n    \"artistId\": \"ffc57ebb-6a9e-453d-9a53-160aef4a7400\",\n    \"duration\": 555\n}",
+							"raw": "{\n    \"name\": \"Updated KC track\",\n    \"duration\": 555\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -309,6 +325,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_BEARER}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -335,6 +361,16 @@
 				{
 					"name": "Get album",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_BEARER}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -359,11 +395,21 @@
 				{
 					"name": "Create album",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_BEARER}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"New album2\",\n    \"artistId\": \"5179b3be-bbae-4163-b4d5-d6659d4aee91\",\n    \"year\": 1996\n}",
+							"raw": "{\n    \"name\": \"Allll\",\n    \"artistId\": \"07a56302-a266-456f-b564-845d1e8e0511\",\n    \"year\": 1996\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -418,6 +464,16 @@
 				{
 					"name": "Delete album",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_BEARER}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -450,6 +506,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_BEARER}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -476,11 +542,21 @@
 				{
 					"name": "Create artist",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_BEARER}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Lavon Volski2\",\n    \"grammy\": true\n}",
+							"raw": "{\n    \"name\": \"AAA\",\n    \"grammy\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -502,6 +578,16 @@
 				{
 					"name": "Get artist",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_BEARER}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -559,6 +645,16 @@
 				{
 					"name": "Remove artist",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AUTH_BEARER}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -753,6 +849,109 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"1111112\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/auth/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"login\": \"Test User\",\n    \"password\": \"1111112\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/auth/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlZjAwY2NmNC1lOThmLTRmZjYtYTFjOC0zY2QyZDVhYTQyMDQiLCJsb2dpbiI6IkFhYTEiLCJyZWZyZXNoIjp0cnVlLCJpYXQiOjE2Nzc0NDkyOTMsImV4cCI6MTY3NzUzNTY5M30.fUD_GM5Wv9dRjmDUSaIfCxtMUSQrYhAMEXBIvMV7Y8s\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/auth/refresh",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Log test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/log-test",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"log-test"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
