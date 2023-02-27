@@ -223,22 +223,26 @@ After application running by docker in `development` mode open new terminal and 
 ```bash
 docker-compose exec api npm run test
 ```
-
 Or you can use npm command:
 ```bash
 npm run docker:api:test
 ```
 
+**Note:** These tests doesn't work at the moment, use `test:auth` command below.
+
+
 To run all test with authorization
 
 ```bash
-docker-compose exec api npm run test:auth
+docker-compose exec api npm run test:auth -- --runInBand
 ```
+**Note:** Don't forget to add `-- --runInBand` flag to run tests in one thread. Otherwise, you will get errors.
 
 Or you can use npm command:
 ```bash
 npm run docker:api:test:auth
 ```
+
 
 *Note:* Linting is configured to run in `development` mode only.
 
@@ -252,6 +256,10 @@ Or in docker container:
 ```
 npm run docker:api:lint
 ```
+
+## Hand Testings
+**Note:** Don't forget to add `Authorization: Bearer <jwt_token>` to the header for each request (except 
+`/auth/signup`, `/auth/login`, `/doc` and `/`).
 
 
 ## Logging
