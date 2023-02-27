@@ -24,10 +24,10 @@ git clone git@github.com:Sanhe/nodejs2022Q4-service.git
 cd nodejs2022Q4-service
 ```
 
-### Switch to the appropriate branch `feature/containerization-database-orm`
+### Switch to the appropriate branch `feature/logging-and-auth`
 
 ```
-git checkout feature/containerization-database-orm
+git checkout feature/logging-and-auth
 ```
 
 ### Copy `.env.example` to `.env` and update it if needed
@@ -223,13 +223,26 @@ After application running by docker in `development` mode open new terminal and 
 ```bash
 docker-compose exec api npm run test
 ```
-
 Or you can use npm command:
 ```bash
 npm run docker:api:test
 ```
 
-## Lint
+**Note:** These tests doesn't work at the moment, use `test:auth` command below.
+
+
+To run all test with authorization
+
+```bash
+docker-compose exec api npm run test:auth -- --runInBand
+```
+**Note:** Don't forget to add `-- --runInBand` flag to run tests in one thread. Otherwise, you will get errors.
+
+Or you can use npm command:
+```bash
+npm run docker:api:test:auth
+```
+
 
 *Note:* Linting is configured to run in `development` mode only.
 
@@ -243,3 +256,24 @@ Or in docker container:
 ```
 npm run docker:api:lint
 ```
+
+## Hand Testings
+**Note:** Don't forget to add `Authorization: Bearer <jwt_token>` to the header for each request (except 
+`/auth/signup`, `/auth/login`, `/doc` and `/`).
+
+
+## Logging
+
+* LOG_MAX_FILE_SIZE - max size of log file in kBs, but some files can be bigger than this value because of the log 
+rotation (the last input data can increase the max size of the file)
+* LOG_LEVEL - log level number
+* LOG_PATH - path to log files
+
+*Note:* Response body is logged only in DEBUG mode.
+
+## OpenAPI/Swagger
+
+After starting the app on port (4000 as default and can be changed in `.env` file on `PORT` variable) you can open
+documentation by typing http://localhost:4000/doc/.
+For more information about OpenAPI/Swagger please visit https://swagger.io/.
+Please, use Bear token for authorization.

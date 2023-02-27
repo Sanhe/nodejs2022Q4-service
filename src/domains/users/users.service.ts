@@ -7,23 +7,30 @@ import { UpdatePasswordDtoInterface } from './interfaces/update-password.dto.int
 import { USER_VERSION_INCREMENT } from './users.config';
 import { InvalidPasswordError } from './errors/invalid-password.error';
 import { UserEntity } from './entities/user.entity';
-import { PrismaService } from '../../prisma.service';
+import { PrismaService } from '../../common/prisma.service';
 import { Prisma } from '@prisma/client';
 import { UsersPrismaFormatter } from './users.prisma.formatter';
+import { CustomLoggerService } from '../../common/logger/logger.service';
+import { getHash, isPlainEqualHash } from '../../common/hasher';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly usersPrismaFormater: UsersPrismaFormatter,
-  ) {}
+    private readonly logger: CustomLoggerService,
+  ) {
+    this.logger.setContext(UsersService.name);
+  }
 
   async create(createUserDto: CreateUserDtoInterface): Promise<UserEntity> {
     const currentTimestamp = getCurrentTimestamp();
+    const hashedPassword = await getHash(createUserDto.password);
 
     const user: UserEntity = {
       id: generateUuid(),
       ...createUserDto,
+      password: hashedPassword,
       version: getCreateEntityVersion(),
       createdAt: currentTimestamp,
       updatedAt: currentTimestamp,
@@ -65,15 +72,37 @@ export class UsersService {
     return user;
   }
 
+  async findOneByLogin(login: string): Promise<UserEntity | undefined> {
+    const prismaUser = await this.prisma.user.findUnique({
+      where: {
+        login,
+      },
+    });
+
+    if (!prismaUser) {
+      return undefined;
+    }
+
+    const user: UserEntity =
+      this.usersPrismaFormater.formatPrismaUserToUser(prismaUser);
+
+    return user;
+  }
+
   async updatePassword(
     user: UserEntity,
     updatePasswordDto: UpdatePasswordDtoInterface,
   ): Promise<UserEntity> {
-    if (user.password !== updatePasswordDto.oldPassword) {
+    const isPasswordValid = await this.validatePassword(
+      user,
+      updatePasswordDto.oldPassword,
+    );
+
+    if (!isPasswordValid) {
       throw new InvalidPasswordError();
     }
 
-    user.password = updatePasswordDto.newPassword;
+    user.password = await getHash(updatePasswordDto.newPassword);
     user.version += USER_VERSION_INCREMENT;
     user.updatedAt = getCurrentTimestamp();
 
@@ -96,5 +125,25 @@ export class UsersService {
         id: user.id,
       },
     });
+  }
+
+  async validatePassword(user: UserEntity, password: string): Promise<boolean> {
+    return isPlainEqualHash(password, user.password);
+  }
+
+  async validateUser(login: string, password: string): Promise<any> {
+    const user = await this.findOneByLogin(login);
+
+    if (!user) {
+      return null;
+    }
+
+    const isPasswordValid = await this.validatePassword(user, password);
+
+    if (!isPasswordValid) {
+      return null;
+    }
+
+    return user;
   }
 }

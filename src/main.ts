@@ -6,10 +6,26 @@ import { CONFIG_PORT_KEY } from './config/defaults';
 import { useContainer } from 'class-validator';
 import { SwaggerModule } from '@nestjs/swagger';
 import { getOpenApiConfig } from './config/open-api.config';
+import { CustomLoggerService } from './common/logger/logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
   const configService = app.get(ConfigService);
+
+  const logger = new CustomLoggerService('Main', {});
+
+  process.on('uncaughtException', (error) => {
+    logger.error('[Uncaught Exception]', error);
+  });
+
+  process.on('unhandledRejection', (error) => {
+    logger.error('[Unhandled Rejection]', error);
+  });
+
+  app.useLogger(logger);
+
   const apiPort = configService.get(CONFIG_PORT_KEY);
 
   app.useGlobalPipes(

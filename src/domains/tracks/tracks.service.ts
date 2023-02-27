@@ -5,15 +5,19 @@ import { generateUuid } from '../../common/uuid';
 import { TrackEntityInterface } from './interfaces/track.entity.interface';
 import { FavoritesService } from '../favorites/favorites.service';
 import { NotInFavoritesError } from '../favorites/errors/not-in-favorites.error';
-import { PrismaService } from '../../prisma.service';
+import { PrismaService } from '../../common/prisma.service';
 import { Track } from '@prisma/client';
+import { CustomLoggerService } from '../../common/logger/logger.service';
 
 @Injectable()
 export class TracksService {
   constructor(
     private readonly favoritesService: FavoritesService,
     private readonly prismaService: PrismaService,
-  ) {}
+    private readonly logger: CustomLoggerService,
+  ) {
+    this.logger.setContext(TracksService.name);
+  }
 
   async create(createTrackDto: CreateTrackDto): Promise<Track> {
     const track = {

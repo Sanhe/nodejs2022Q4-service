@@ -9,7 +9,8 @@ import { ArtistsService } from '../artists/artists.service';
 import { AlbumsModule } from '../albums/albums.module';
 import { AlbumExistsConstraint } from '../albums/validators/album-exists.constraint';
 import { AlbumsService } from '../albums/albums.service';
-import { PrismaService } from '../../prisma.service';
+import { PrismaService } from '../../common/prisma.service';
+import { CustomLoggerService } from '../../common/logger/logger.service';
 
 @Module({
   controllers: [TracksController],
@@ -19,6 +20,7 @@ import { PrismaService } from '../../prisma.service';
     forwardRef(() => FavoritesModule),
   ],
   providers: [
+    CustomLoggerService,
     TracksService,
     ArtistExistsConstraint,
     ArtistsService,

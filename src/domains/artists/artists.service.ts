@@ -4,10 +4,11 @@ import { UpdateArtistDto } from './dto/update-artist.dto';
 import { generateUuid } from '../../common/uuid';
 import { FavoritesService } from '../favorites/favorites.service';
 import { NotInFavoritesError } from '../favorites/errors/not-in-favorites.error';
-import { PrismaService } from '../../prisma.service';
+import { PrismaService } from '../../common/prisma.service';
 import { Artist } from '@prisma/client';
 import { TracksService } from '../tracks/tracks.service';
 import { AlbumsService } from '../albums/albums.service';
+import { CustomLoggerService } from '../../common/logger/logger.service';
 
 @Injectable()
 export class ArtistsService {
@@ -16,7 +17,10 @@ export class ArtistsService {
     private readonly prismaService: PrismaService,
     private readonly tracksService: TracksService,
     private readonly albumsService: AlbumsService,
-  ) {}
+    private readonly logger: CustomLoggerService,
+  ) {
+    this.logger.setContext(ArtistsService.name);
+  }
 
   async create(createArtistDto: CreateArtistDto): Promise<Artist> {
     const artist = {
