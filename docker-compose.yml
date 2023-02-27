@@ -1,0 +1,58 @@
+version: '3.6'
+
+services:
+  db:
+    build:
+      context: ./database
+      dockerfile: ./Dockerfile
+    image: shautsou/nodejs2022q4-db:latest
+    container_name: db
+    restart: always
+    command: [
+      "postgres",
+      "-p",
+      "${DATABASE_PORT}",
+    ]
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - db-logs:/var/log/postgresql
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      target: ${DOCKER_API_TARGET}
+    image: shautsou/nodejs2022q4-api:latest
+    container_name: api
+    restart: on-failure
+    environment:
+      PORT: ${PORT}
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./src/:/usr/app/src/
+      - ./prisma/:/usr/app/prisma/
+      - api-node-modules:/usr/app/node_modules
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+volumes:
+  db-data:
+  db-logs:
+  api-node-modules:
+
+networks:
+  app-network:
+    driver: bridge
